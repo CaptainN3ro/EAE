@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             }
         if(i==2){
+            
             my_layout.removeAllViews();
             int Array_Count = Netflix.size();
 
