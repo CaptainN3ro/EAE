@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if(i==0){
-
+            my_layout.removeAllViews();
             int Array_Count = alleSerien.size();
 
             for (int z=0; z< Array_Count; z++){
