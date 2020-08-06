@@ -3,12 +3,14 @@ package com.example.studiengaenge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActionBar;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     LinearLayout my_layout;
 
     String[] streamingdienste;
+
+    List<String> Saved; //Hier liegen die Serien, die gecheckt wurden
+    List<String> Hinzugefuegt; //Die eigenen Serien
     List<String> Amazon;
     List<String> Netflix;
     List<String> Disney;
@@ -41,11 +46,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         my_layout = findViewById(R.id.SERIEN);
 
 
+        Saved = new ArrayList<>();
+
+
+        //loadSavedData();
+
         fillData();
 
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, streamingdienste);
         spinnerDienste.setAdapter(spinnerAdapter);
         spinnerDienste.setOnItemSelectedListener(this);
+    }
+
+    private void loadSavedData(){
+        //Hier .txt einlesen in Array "Saved"
     }
 
 
@@ -83,9 +97,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             int Array_Count = alleSerien.size();
 
             for (int z=0; z< Array_Count; z++){
-                CheckBox cb = new CheckBox(this);
+                final CheckBox cb = new CheckBox(this);
                 cb.setText(alleSerien.get(z));
                 cb.setId(z+6);
+
+                for(int y = 0; y< Saved.size(); y++){   //Zum Haken setzen der gespeicherten
+                    if((Saved.get(y)).equals(cb.getText().toString())){
+                        cb.setChecked(true);
+                    }
+                }
+
+
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //Zum Überschreiben der Checkbox-Checkfunktion
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
+                            Saved.add(cb.getText().toString());
+                        }else{
+                            for(int i=0;i<Saved.size();i++){
+                                if(cb.getText().toString().equals(Saved.get(i))){
+                                    Saved.remove(i);
+                                }
+                            }
+                        }
+                    }
+                });
+
+
                 my_layout.addView(cb);
 
             }
@@ -98,23 +136,70 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             int Array_Count = Amazon.size();
 
             for (int z=0; z< Array_Count; z++) {
-                CheckBox cb = new CheckBox(this);
+                final CheckBox cb = new CheckBox(this);
                 cb.setText(Amazon.get(z));
                 cb.setId(z + 6);
+
+                for(int y = 0; y< Saved.size(); y++){   //Zum Haken setzen der gespeicherten
+                    if((Saved.get(y)).equals(cb.getText().toString())){
+                        cb.setChecked(true);
+                    }
+                }
+
+
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //Zum Überschreiben der Checkbox-Checkfunktion
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
+                            Saved.add(cb.getText().toString());
+                        }else{
+                            for(int i=0;i<Saved.size();i++){
+                                if(cb.getText().toString().equals(Saved.get(i))){
+                                    Saved.remove(i);
+                                }
+                            }
+                        }
+                    }
+                });
+
                 my_layout.addView(cb);
                 //ArrayAdapter listViewAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, Netflix);
                 //ListViewDienste.setAdapter(listViewAdapter);
             }
             }
         if(i==2){
-            
+
+
             my_layout.removeAllViews();
             int Array_Count = Netflix.size();
 
             for (int z=0; z< Array_Count; z++){
-                CheckBox cb = new CheckBox(this);
+                final CheckBox cb = new CheckBox(this);
                 cb.setText(Netflix.get(z));
                 cb.setId(z+6);
+
+                for(int y = 0; y< Saved.size(); y++){   //Zum Haken setzen der gespeicherten
+                    if((Saved.get(y)).equals(cb.getText().toString())){
+                        cb.setChecked(true);
+                    }
+                }
+
+
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //Zum Überschreiben der Checkbox-Checkfunktion
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
+                            Saved.add(cb.getText().toString());
+                        }else{
+                            for(int i=0;i<Saved.size();i++){
+                                if(cb.getText().toString().equals(Saved.get(i))){
+                                    Saved.remove(i);
+                                }
+                            }
+                        }
+                    }
+                });
+
                 my_layout.addView(cb);
         }
             //ArrayAdapter listViewAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, Amazon);
@@ -125,9 +210,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             int Array_Count = Disney.size();
 
             for (int z=0; z< Array_Count; z++){
-                CheckBox cb = new CheckBox(this);
+                final CheckBox cb = new CheckBox(this);
                 cb.setText(Disney.get(z));
                 cb.setId(z+6);
+
+                for(int y = 0; y< Saved.size(); y++){   //Zum Haken setzen der gespeicherten
+                    if((Saved.get(y)).equals(cb.getText().toString())){
+                        cb.setChecked(true);
+                    }
+                }
+
+
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //Zum Überschreiben der Checkbox-Checkfunktion
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if(b){
+                            Saved.add(cb.getText().toString());
+                        }else{
+                            for(int i=0;i<Saved.size();i++){
+                                if(cb.getText().toString().equals(Saved.get(i))){
+                                    Saved.remove(i);
+                                }
+                            }
+                        }
+                    }
+                });
+
                 my_layout.addView(cb);
         }
             //ArrayAdapter listViewAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, Disney);
@@ -140,9 +248,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         int Array_Count = alleSerien.size();
 
         for (int z=0; z< Array_Count; z++){
-            CheckBox cb = new CheckBox(this);
+            final CheckBox cb = new CheckBox(this);
             cb.setText(alleSerien.get(z));
             cb.setId(z+6);
+
+            for(int y = 0; y< Saved.size(); y++){   //Zum Haken setzen der gespeicherten
+                if((Saved.get(y)).equals(cb.getText().toString())){
+                    cb.setChecked(true);
+                }
+            }
+
+
+            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() { //Zum Überschreiben der Checkbox-Checkfunktion
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b){
+                        Saved.add(cb.getText().toString());
+                    }else{
+                        for(int i=0;i<Saved.size();i++){
+                            if(cb.getText().toString().equals(Saved.get(i))){
+                                Saved.remove(i);
+                            }
+                        }
+                    }
+                }
+            });
+
             my_layout.addView(cb);
 
         }
