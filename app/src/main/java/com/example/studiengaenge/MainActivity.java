@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActionBar;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     Spinner spinnerDienste;
     LinearLayout my_layout;
+    Button addButton;
+    TextView nameTextView;
 
     String[] streamingdienste;
 
@@ -44,7 +49,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setTitle(" NWT - Never Watch Twice ");
         spinnerDienste = findViewById(R.id.STREAMINGDIENSTE);
         my_layout = findViewById(R.id.SERIEN);
+        addButton = findViewById(R.id.BUTTON_ADD);
+        nameTextView = findViewById(R.id.ADD_NAME_SERIE);
 
+        addButton.setOnClickListener(this::onClickAdd);
 
         Saved = new ArrayList<>();
 
@@ -52,7 +60,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //loadSavedData();
 
         fillData();
+        update();
+        registerForContextMenu(my_layout);
+    }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        //MenuInflater inflater = new MenuInflater();
+        // TODO Kontextmenu erstellen und hinzufügen (Blatt 3 Vid 2)
+
+    }
+
+    private void update() {
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, streamingdienste);
         spinnerDienste.setAdapter(spinnerAdapter);
         spinnerDienste.setOnItemSelectedListener(this);
@@ -63,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-    private void fillData(){
-        streamingdienste = new String[] {
-          "-Alle Serien-", "Amazon","Netflix","Disney +"
+    private void fillData() {
+        streamingdienste = new String[]{
+                "-Alle Serien-", "Amazon", "Netflix", "Disney +"
         };
 
         Amazon = new ArrayList<>();
@@ -89,6 +109,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Collections.sort(alleSerien, String.CASE_INSENSITIVE_ORDER);
     }
 
+    public void onClickAdd(View v) {
+        if(v == addButton) {
+            String text = nameTextView.getText().toString();
+            if(!text.equals("")) {
+                alleSerien.add(text);
+            } else {
+                // TODO Show Error
+            }
+            nameTextView.setText("");
+            update();
+        }
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
