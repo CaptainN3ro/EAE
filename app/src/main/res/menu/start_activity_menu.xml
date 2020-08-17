@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- TODO: ITEM=SUCHEN, ITEM=EDITIEREN (inkl. ITEM=HINZUFÜGEN, ITEM=LÖSCHEN), ITEM=EINSTELLEN und ITEM=CAST -->
+    <!-- Info-Bilder:
+    Suchen = @drawable/ic_search_white_48dp
+    Editieren = @drawable/ic_mode_edit_white_48dp
+    Hinzufügen = @drawable/ic_add_black_48dp
+    Löschen = @drawable/ic_delete_black_48dp
+    Einstellen = @drawable/ic_settings_white_48dp
+    Cast = @drawable/ic_cast_white_48dp -->
+
+
+    <item
+        android:id="@+id/ITEM_HILFE"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="Hilfe"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ITEM_HINZUFUEGEN"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Hinzufügen"
+        app:showAsAction="always" />
+</menu>

@@ -1,4 +1,4 @@
-package com.example.studiengaenge;
+package com.example.nwt;
 
 import android.content.Context;
 

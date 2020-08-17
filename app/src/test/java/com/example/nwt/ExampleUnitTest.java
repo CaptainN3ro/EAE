@@ -1,4 +1,4 @@
-package com.example.studiengaenge;
+package com.example.nwt;
 
 import org.junit.Test;
 
