@@ -16,7 +16,8 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".HilfeActivity"></activity>
+        <activity android:name=".DetailActivity" />
         <activity android:name=".PreActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +27,7 @@
         </activity>
         <activity android:name=".BearbeitenActivity" />
         <activity android:name=".HinzufuegenActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

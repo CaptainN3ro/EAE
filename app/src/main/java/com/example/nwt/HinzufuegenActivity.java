@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public class HinzufuegenActivity extends AppCompatActivity {
 
-    Button addButton;
+    Button addButton, backButton;
     TextView nameBox;
 
     @Override
@@ -23,7 +23,9 @@ public class HinzufuegenActivity extends AppCompatActivity {
 
         addButton = findViewById(R.id.BUTTON_ADD);
         nameBox = findViewById(R.id.INPUT_NAME);
+        backButton = findViewById(R.id.BUTTON_CANCEL_ADD);
 
+        backButton.setOnClickListener((v) -> finish());
         addButton.setOnClickListener(this::returnData);
     }
 

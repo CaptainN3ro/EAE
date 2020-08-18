@@ -3,7 +3,11 @@ package com.example.nwt;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -68,12 +72,34 @@ public class BearbeitenActivity extends AppCompatActivity {
         });
 
         entfernen.setOnClickListener((view) -> {
-
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("SERIE", s);
-            setResult(Activity.RESULT_FIRST_USER, resultIntent);
-            finish();
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Sicher, dass die Serie gelöscht werden soll? Dies kann nicht rückgängig gemacht werden!")
+                    .setPositiveButton("Löschen!", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            returnDelete();
+                        }
+                    })
+                    .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            Button b = dialog.getButton(Dialog.BUTTON_POSITIVE);
+            b.setBackgroundResource(R.drawable.button_delete);
+            b.setPadding(25, 0, 25, 0);
+            b.setTextColor(Color.rgb(255, 255, 255));
         });
+    }
+
+    private void returnDelete() {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("SERIE", s);
+        setResult(Activity.RESULT_FIRST_USER, resultIntent);
+        finish();
     }
 
     private boolean validateTextfields() {

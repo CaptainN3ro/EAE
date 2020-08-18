@@ -41,7 +41,7 @@ public class Dienst implements Serializable {
             return true;
         }
         for(int i = 0; i < dienste.size(); i++) {
-            if(dienste.get(i).dienstName.equals(dienstName)) {
+            if(dienste.get(i).dienstName.equalsIgnoreCase(dienstName)) {
                 return true;
             }
         }

@@ -111,10 +111,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.ITEM_HILFE:
+                Intent intent = new Intent(this, HilfeActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.ITEM_HINZUFUEGEN:
-                Intent intent = new Intent(this, HinzufuegenActivity.class);
-                startActivityForResult(intent, 1);
+                Intent i = new Intent(this, HinzufuegenActivity.class);
+                startActivityForResult(i, 1);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -128,14 +130,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (requestCode) {
             case (1):
                 if(resultCode == Activity.RESULT_OK) {
-                    // TODO Daten aus web Holen und hinzufügen
-                    String text = data.getStringExtra("NAME");
-                    if(!text.equals("")) {
-                        serien.add(new Serie(text, 5, false));
+                    String name = data.getStringExtra("NAME");
+                    if(!name.equals("")) {
+                        // TODO Daten aus web Holen und hinzufügen
+                        serien.add(new Serie(name, 5, false));
                     } else {
                         // TODO Show Error
                     }
-                    update();
                 }
                 break;
             case (2):
@@ -146,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             tmpSerie.setName(s.getName());
                             tmpSerie.setStaffeln(s.getStaffeln());
                             tmpSerie.setStreamingDienste(s.getStreamingDienste());
-                            update();
                         }
                     }
                 }else if(resultCode == Activity.RESULT_FIRST_USER){
@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     for(int i=0;i<serien.size();i++){
                         if(serien.get(i).getId()==s.getId()){
                             serien.remove(i);
-                            update();
                         }
                     }
                 }
@@ -162,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             default:
                 break;
         }
+        updateDienste();
         saveData();
     }
 
@@ -210,6 +210,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.e("NWT", e.getMessage());
         }
         Log.d("NWT", s.toString());
+        updateDienste();
+    }
+
+    private void updateDienste() {
+        dienste.clear();
+        dienste.add(new Dienst("", "-Alle Serien-"));
+        for(int i = 0; i < serien.size(); i++) {
+            Serie s = serien.get(i);
+            for(Dienst d: s.getStreamingDienste()) {
+                if(!d.isIncluded(dienste)) {
+                    dienste.add(d);
+                }
+            }
+        }
+        update();
     }
 
 

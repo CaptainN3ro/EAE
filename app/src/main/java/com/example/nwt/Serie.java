@@ -49,6 +49,10 @@ public class Serie implements Serializable {
 
     public void setStreamingDienste(List<Dienst> streamingDienste) {
         this.streamingDienste = streamingDienste;
+        for(Dienst d: streamingDienste) {
+            d.setAnzeigeName(makeFirstCaps(d.getAnzeigeName()));
+            d.setDienstName(makeFirstCaps(d.getDienstName()));
+        }
     }
 
     public boolean isChecked() {
@@ -61,6 +65,18 @@ public class Serie implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    private String makeFirstCaps(String s) {
+        String[] parts = s.split(" ");
+        String newString = "";
+        for(int i = 0; i < parts.length; i++) {
+            if(i > 0) {
+                newString += " ";
+            }
+            newString += parts[i].substring(0, 1).toUpperCase() + parts[i].substring(1).toLowerCase();
+        }
+        return newString;
     }
 
     @Override
