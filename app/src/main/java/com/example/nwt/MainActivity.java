@@ -149,6 +149,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             update();
                         }
                     }
+                }else if(resultCode == Activity.RESULT_FIRST_USER){
+                    Serie s = (Serie) data.getSerializableExtra("SERIE");
+                    for(int i=0;i<serien.size();i++){
+                        if(serien.get(i).getId()==s.getId()){
+                            serien.remove(i);
+                            update();
+                        }
+                    }
                 }
                 break;
             default:

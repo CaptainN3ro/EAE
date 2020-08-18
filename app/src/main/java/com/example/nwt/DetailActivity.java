@@ -7,12 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
     TextView name_inhalt, staffeln_inhalt, dienste_inhalt;
-    Button bearbeiten, zurueck;
+    Button bearbeiten, zurueck, entfernen;
     Serie s;
 
 
@@ -27,6 +28,7 @@ public class DetailActivity extends AppCompatActivity {
         dienste_inhalt = findViewById(R.id.INSERT_DIENSTE);
         bearbeiten = findViewById(R.id.DT_EDIT);
         zurueck = findViewById(R.id.DT_BACK);
+        entfernen = findViewById(R.id.DT_DELETE);
         Intent intent = getIntent();
 
         if(intent.hasExtra("SERIE")) {
@@ -61,8 +63,12 @@ public class DetailActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == Activity.RESULT_OK) {
+        if(resultCode == RESULT_OK) {
             setResult(Activity.RESULT_OK, data);
+            finish();
+        }else if(resultCode == RESULT_FIRST_USER){
+
+            setResult(Activity.RESULT_FIRST_USER, data);
             finish();
         }
     }

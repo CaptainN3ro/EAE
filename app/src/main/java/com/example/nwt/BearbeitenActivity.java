@@ -15,7 +15,7 @@ import java.util.List;
 
 public class BearbeitenActivity extends AppCompatActivity {
 
-    Button zurueck, speichern;
+    Button zurueck, speichern, entfernen;
     TextView name, staffeln, dienste;
     Serie s;
 
@@ -31,6 +31,7 @@ public class BearbeitenActivity extends AppCompatActivity {
 
         zurueck = findViewById(R.id.BUTTON_ZURUECK);
         speichern = findViewById(R.id.BUTTON_SPEICHERN);
+        entfernen = findViewById(R.id.DT_DELETE);
 
         Intent intent = getIntent();
 
@@ -63,6 +64,14 @@ public class BearbeitenActivity extends AppCompatActivity {
             Intent resultIntent = new Intent();
             resultIntent.putExtra("SERIE", s);
             setResult(Activity.RESULT_OK, resultIntent);
+            finish();
+        });
+
+        entfernen.setOnClickListener((view) -> {
+
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("SERIE", s);
+            setResult(Activity.RESULT_FIRST_USER, resultIntent);
             finish();
         });
     }
