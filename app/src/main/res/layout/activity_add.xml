@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/INPUT_NAME"
         android:background="@drawable/custom_button_2"
-        android:fontFamily="@font/raleway"
+        android:fontFamily="@font/raleway_semibold"
         android:text="Hinzufügen"
         android:textColor="#FFFFFF" />
 </RelativeLayout>

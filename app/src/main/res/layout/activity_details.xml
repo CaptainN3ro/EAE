@@ -85,13 +85,14 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/button_red"
-            android:fontFamily="@font/raleway"
+            android:fontFamily="@font/raleway_semibold"
             android:padding="5dp"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="5dp"
-            android:text="Zurück" />
+            android:text="Zurück"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/BUTTON_SPEICHERN"
@@ -100,12 +101,13 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:background="@drawable/custom_button_2"
-            android:fontFamily="@font/raleway"
+            android:fontFamily="@font/raleway_semibold"
             android:padding="5dp"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
             android:paddingBottom="5dp"
-            android:text="Speichern" />
+            android:text="Speichern"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </LinearLayout>
