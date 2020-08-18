@@ -1,9 +1,13 @@
 package com.example.nwt;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
@@ -20,6 +24,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner spinnerDienste;
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     List<Serie> serien;
     List<Dienst> dienste;
+    Typeface font;
 
 
     @Override
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinnerDienste = findViewById(R.id.STREAMINGDIENSTE);
         serienLayout = findViewById(R.id.SERIEN_LAYOUT);
         setTitle(Html.fromHtml("<font color='#222222'>Never Watch Twice</font>"));
+        font = ResourcesCompat.getFont(this, R.font.raleway);
         fillData();
         //loadSavedData();
         update();
@@ -178,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             final CheckBox cb = new CheckBox(this);
             cb.setText(serie.getName());
             cb.setId(i);
+            cb.setTypeface(font);
             if(serie.isChecked()) {
                 cb.setChecked(true);
             }
@@ -202,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         int Array_Count = serien.size();
@@ -209,6 +218,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         for (int z=0; z< Array_Count; z++){
             final CheckBox cb = new CheckBox(this);
             cb.setText(serien.get(z).getName());
+            cb.setTypeface(font);
+
             cb.setId(z);
 
             if(serien.get(z).isChecked()) {
