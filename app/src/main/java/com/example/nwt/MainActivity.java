@@ -2,14 +2,19 @@ package com.example.nwt;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,8 +26,17 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static androidx.core.content.res.ResourcesCompat.getFont;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -33,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     List<Serie> serien;
     List<Dienst> dienste;
     Typeface font;
+    File f;
+
+
 
 
     @Override
@@ -43,11 +60,43 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinnerDienste = findViewById(R.id.STREAMINGDIENSTE);
         serienLayout = findViewById(R.id.SERIEN_LAYOUT);
         setTitle(Html.fromHtml("<font color='#222222'>Never Watch Twice</font>"));
-        font = ResourcesCompat.getFont(this, R.font.raleway);
+        font = getResources().getFont(R.font.raleway);
+
+        String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        String fileName = "UserData.csv";
+        String filePath = baseDir + File.separator + fileName;
+        f = new File(fileName);
+
         fillData();
-        //loadSavedData();
+        loadSavedData();
         update();
 
+    }
+
+    public void saveData() {
+        try {
+            deleteSavedData();
+            OutputStreamWriter bw = new OutputStreamWriter(openFileOutput(f.getName(), MODE_APPEND));
+            String zv="";
+            for (int i = 0; i < serien.size(); i++) {
+                Serie sw = serien.get(i);
+                String dienste = "";
+                for (int y = 0; y < sw.getStreamingDienste().size(); y++) {
+                    if (y == sw.getStreamingDienste().size() - 1) {
+                        dienste += sw.getStreamingDienste().get(y);
+                    } else {
+                        dienste += sw.getStreamingDienste().get(y) + ", ";
+                    }
+                }
+
+                zv+= sw.getName() + ";" + sw.getStaffeln() + ";"+sw.isChecked() +";" + dienste;
+                zv+="\n";
+            }
+            bw.write(zv);
+            bw.close();
+        }catch(Exception e){
+            Log.e("NWT", e.getMessage());
+            }
     }
 
     @Override
@@ -105,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             default:
                 break;
         }
-        // TODO Save
+        saveData();
     }
 
     private void update() {
@@ -114,8 +163,45 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinnerDienste.setOnItemSelectedListener(this);
     }
 
+    private void deleteSavedData(){
+        try{
+            OutputStreamWriter out = new OutputStreamWriter(openFileOutput(f.getName(), MODE_PRIVATE));
+            deleteFile(out.getEncoding());
+            out.close();
+        }catch(Exception e){
+
+        }
+    }
+
     private void loadSavedData(){
-        //Hier .txt einlesen in Array "Saved"
+        serien.clear();
+        StringBuilder s= new StringBuilder();
+        try{
+            InputStreamReader in = new InputStreamReader(openFileInput(f.getName()));
+            BufferedReader reader = new BufferedReader(in);
+            String line;
+            while((line=reader.readLine())!=null){
+                s.append(line+"\n");
+            }
+            reader.close();
+            String[] partz=s.toString().split("\n");
+            for(int i=0;i<partz.length;i++){
+                String[] tokens=partz[i].split(";");
+                Serie serie = new Serie(tokens[0],Integer.parseInt(tokens[1]),Boolean.parseBoolean(tokens[2]));
+                if(tokens.length>3) {
+                    String[] anbieter = tokens[3].split(",");
+                    List<Dienst> dienstliste = new ArrayList<>();
+                    for (int y = 0; y < anbieter.length; y++) {
+                        dienstliste.add(new Dienst(anbieter[y].trim()));
+                    }
+                    serie.setStreamingDienste(dienstliste);
+                }
+                serien.add(serie);
+            }
+        }catch(Exception e){
+            Log.e("NWT", e.getMessage());
+        }
+        Log.d("NWT", s.toString());
     }
 
 
@@ -195,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     serie.setChecked(b);
-                    // TODO Save
+                    saveData();
                 }
             });
             cb.setOnLongClickListener((view1) -> {
