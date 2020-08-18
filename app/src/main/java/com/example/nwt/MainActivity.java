@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             });
             cb.setOnLongClickListener((view1) -> {
-                Intent intent = new Intent(this, BearbeitenActivity.class);
+                Intent intent = new Intent(this, DetailActivity.class);
                 intent.putExtra("SERIE", serie);
                 startActivityForResult(intent, 2);
                 return true;

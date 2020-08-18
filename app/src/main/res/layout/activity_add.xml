@@ -12,6 +12,7 @@
         android:id="@+id/INPUT_NAME"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="Name der Serie"
