@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -25,10 +26,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String fileName = "UserData.csv";
         String filePath = baseDir + File.separator + fileName;
         f = new File(fileName);
+
+
 
         fillData();
         loadSavedData();
@@ -117,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.ITEM_HINZUFUEGEN:
                 Intent i = new Intent(this, HinzufuegenActivity.class);
                 startActivityForResult(i, 1);
+
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -136,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Serie s = new Serie(name);
                         DataScraper.scrapeData(s);
                         serien.add(s);
+                        new Thread(() ->  sendToast()).start();
+
                     } else {
                         // TODO Show Error
                     }
@@ -184,7 +194,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void loadSavedData(){
-        serien.clear();
+
+        try {
+            FileInputStream fis = openFileInput(f.getName());
+            serien.clear();
+            fis.close();
+        }catch (Exception ee){
+            Log.e("NWT", "Erstes mal öffnen, keine File vorhanden, deshalb statische Einträge.");
+        }
+
         StringBuilder s= new StringBuilder();
         try{
             InputStreamReader in = new InputStreamReader(openFileInput(f.getName()));
@@ -208,8 +226,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 serien.add(serie);
             }
+
         }catch(Exception e){
-            Log.e("NWT", e.getMessage());
+            Log.e("NWT", "Erstes mal öffnen, keine File vorhanden, deshalb kann kein Einlesen vorgenommen werden.");
         }
         Log.d("NWT", s.toString());
         updateDienste();
@@ -251,35 +270,55 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Serie s;
         //Amazon
-        s = new Serie("The Boys", 3, false);
+        s = new Serie("The Boys", 1, false);
         s.setStreamingDienste(anbieter_amazon);
         serien.add(s);
-        s = new Serie("Supernatural", 14, false);
+        s = new Serie("Tom Clancy's Jack Ryan", 2, false);
         s.setStreamingDienste(anbieter_amazon);
         serien.add(s);
-        s = new Serie("Mr. Robot", 3, true);
+        s = new Serie("Upload", 1, false);
+        s.setStreamingDienste(anbieter_amazon);
+        serien.add(s);
+        s = new Serie("Good Omens", 4, false);
+        s.setStreamingDienste(anbieter_amazon);
+        serien.add(s);
+        s = new Serie("Mr. Robot", 4, false);
         s.setStreamingDienste(anbieter_amazon);
         serien.add(s);
 
         //Netflix
-        s = new Serie("How to sell drugs online", 1, false);
+        s = new Serie("How to sell drugs online", 2, false);
         s.setStreamingDienste(anbieter_netflix);
         serien.add(s);
-        s = new Serie("Death Note", 3, true);
+        s = new Serie("Lost in Space", 2, false);
         s.setStreamingDienste(anbieter_netflix);
         serien.add(s);
-        s = new Serie("The Ranch", 4, false);
+        s = new Serie("The Ranch", 7, false);
+        s.setStreamingDienste(anbieter_netflix);
+        serien.add(s);
+        s = new Serie("You - Du wirst mich lieben", 2, false);
+        s.setStreamingDienste(anbieter_netflix);
+        serien.add(s);
+        s = new Serie("Arrested Development", 5, false);
         s.setStreamingDienste(anbieter_netflix);
         serien.add(s);
 
         //Disney
-        s = new Serie("Star Wars The Clone Wars", 10, false);
+        s = new Serie("Star Wars The Clone Wars", 7, false);
         s.setStreamingDienste(anbieter_disney);
         serien.add(s);
-        s = new Serie("Into the Woods", 3, true);
+        s = new Serie("High School Musical: The Series", 1, false);
         s.setStreamingDienste(anbieter_disney);
         serien.add(s);
-
+        s = new Serie("The Mendalorian", 1, false);
+        s.setStreamingDienste(anbieter_disney);
+        serien.add(s);
+        s = new Serie("101 Dalmatian Street", 1, false);
+        s.setStreamingDienste(anbieter_disney);
+        serien.add(s);
+        s = new Serie("Marvel Future Avengers", 2, false);
+        s.setStreamingDienste(anbieter_disney);
+        serien.add(s);
         //serien.sort((s1, s2) -> s1.getName().compareTo(s2.getName()));
     }
 
@@ -351,6 +390,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             serienLayout.addView(cb);
 
+        }
+    }
+
+    public void sendToast() {
+        try {
+            Looper.prepare();
+            Toast toast = Toast.makeText(getApplicationContext(), "1/3 Name geladen", Toast.LENGTH_SHORT);
+            toast.setMargin(50, 50);
+            toast.show();
+            Thread.sleep(2000);
+            Toast toast2 = Toast.makeText(getApplicationContext(), "2/3 Staffeln geladen", Toast.LENGTH_SHORT);
+            toast2.setMargin(50, 50);
+            toast2.show();
+            Thread.sleep(2000);
+            Toast toast3 = Toast.makeText(getApplicationContext(), "3/3 Dienste geladen", Toast.LENGTH_SHORT);
+            toast3.setMargin(50, 50);
+            toast3.show();
+        }catch(Exception e){
+            Log.e("NWT",e.toString());
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.nwt;
 
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class DataScraper {
     private static final String scrapeUrlDienste = "https://www.werstreamt.es/serien/?q=NAME";
     private static boolean done = false;
     private static Serie serie;
+
 
     public static void scrapeData(Serie serie) {
         DataScraper.serie = serie;
