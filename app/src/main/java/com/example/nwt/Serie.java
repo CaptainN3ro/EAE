@@ -15,6 +15,11 @@ public class Serie implements Serializable {
     private String name;
     private List<Dienst> streamingDienste;
 
+    public Serie(String name) {
+        this();
+        this.name = makeFirstCaps(name);
+    }
+
     public Serie() {
         streamingDienste = new ArrayList<>();
         id = ++ID_COUNTER;
@@ -22,7 +27,7 @@ public class Serie implements Serializable {
 
     public Serie(String name, int staffeln, boolean checked) {
         this();
-        this.name = name;
+        this.name = makeFirstCaps(name);
         this.staffeln = staffeln;
         this.checked = checked;
     }
@@ -32,7 +37,7 @@ public class Serie implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = makeFirstCaps(name);
     }
 
     public int getStaffeln() {

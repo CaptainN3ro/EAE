@@ -31,7 +31,6 @@ public class HinzufuegenActivity extends AppCompatActivity {
 
     public void returnData(View v) {
         Intent resultIntent = new Intent();
-
         resultIntent.putExtra("NAME", nameBox.getText().toString());
         setResult(Activity.RESULT_OK, resultIntent);
         finish();

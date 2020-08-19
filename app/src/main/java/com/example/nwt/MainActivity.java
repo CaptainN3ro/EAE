@@ -133,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     String name = data.getStringExtra("NAME");
                     if(!name.equals("")) {
                         // TODO Daten aus web Holen und hinzufügen
-                        serien.add(new Serie(name, 5, false));
+                        Serie s = new Serie(name);
+                        DataScraper.scrapeData(s);
+                        serien.add(s);
                     } else {
                         // TODO Show Error
                     }
