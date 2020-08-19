@@ -14,8 +14,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,14 +54,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Typeface font;
     File f;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dienste = new ArrayList<>();
+        serien = new ArrayList<>();
 
         spinnerDienste = findViewById(R.id.STREAMINGDIENSTE);
         serienLayout = findViewById(R.id.SERIEN_LAYOUT);
@@ -71,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String filePath = baseDir + File.separator + fileName;
         f = new File(fileName);
 
-
-
-        fillData();
         loadSavedData();
         update();
 
@@ -138,17 +136,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         switch (requestCode) {
             case (1):
                 if(resultCode == Activity.RESULT_OK) {
-                    String name = data.getStringExtra("NAME");
-                    if(!name.equals("")) {
+                    Serie s = (Serie) data.getSerializableExtra("SERIE");
+                    boolean autoload = data.getBooleanExtra("AUTOLOAD", true);
+                    Toast t = Toast.makeText(this, s.getName() + " erfolgreich hinzugefügt!", Toast.LENGTH_SHORT);
+                    t.setGravity(Gravity.BOTTOM, 0, 50);
+                    if(autoload) {
                         // TODO Daten aus web Holen und hinzufügen
-                        Serie s = new Serie(name);
-                        DataScraper.scrapeData(s);
-                        serien.add(s);
-                        new Thread(() ->  sendToast()).start();
-
+                        DataScraper.scrapeData(s, this::saveData, t);
                     } else {
-                        // TODO Show Error
+                        t.show();
                     }
+                    serien.add(s);
                 }
                 break;
             case (2):
@@ -195,14 +193,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void loadSavedData(){
 
-        try {
-            FileInputStream fis = openFileInput(f.getName());
-            serien.clear();
-            fis.close();
-        }catch (Exception ee){
-            Log.e("NWT", "Erstes mal öffnen, keine File vorhanden, deshalb statische Einträge.");
-        }
-
         StringBuilder s= new StringBuilder();
         try{
             InputStreamReader in = new InputStreamReader(openFileInput(f.getName()));
@@ -213,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
             reader.close();
             String[] partz=s.toString().split("\n");
-            for(int i=0;i<partz.length;i++){
+            for(int i = 0;i < partz.length;i++){
                 String[] tokens=partz[i].split(";");
                 Serie serie = new Serie(tokens[0],Integer.parseInt(tokens[1]),Boolean.parseBoolean(tokens[2]));
                 if(tokens.length>3) {
@@ -227,10 +217,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 serien.add(serie);
             }
 
-        }catch(Exception e){
-            Log.e("NWT", "Erstes mal öffnen, keine File vorhanden, deshalb kann kein Einlesen vorgenommen werden.");
+        } catch(Exception e) {
+            Log.e("NWT", "Gespeicherte Datei enthält invalide oder keine Daten. Standardserien werden hinzugefügt!");
+            Intent i = new Intent(this, HinzufuegenActivity.class);
+            startActivityForResult(i, 1);
         }
-        Log.d("NWT", s.toString());
         updateDienste();
     }
 
@@ -250,14 +241,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     private void fillData() {
-        dienste = new ArrayList<>();
-
         dienste.add(new Dienst("", "-Alle Serien-"));
         dienste.add(new Dienst("Amazon", "Amazon"));
         dienste.add(new Dienst("Netflix", "Netflix"));
         dienste.add(new Dienst("Disney +", "Disney +"));
 
-        serien = new ArrayList<>();
 
         List<Dienst> anbieter_amazon = new ArrayList<>();
         anbieter_amazon.add(dienste.get(1));
@@ -319,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         s = new Serie("Marvel Future Avengers", 2, false);
         s.setStreamingDienste(anbieter_disney);
         serien.add(s);
-        //serien.sort((s1, s2) -> s1.getName().compareTo(s2.getName()));
+//        serien.sort((s1, s2) -> s1.getName().compareTo(s2.getName()));
     }
 
     @Override
@@ -393,22 +381,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    public void sendToast() {
-        try {
-            Looper.prepare();
-            Toast toast = Toast.makeText(getApplicationContext(), "1/3 Name geladen", Toast.LENGTH_SHORT);
-            toast.setMargin(50, 50);
-            toast.show();
-            Thread.sleep(2000);
-            Toast toast2 = Toast.makeText(getApplicationContext(), "2/3 Staffeln geladen", Toast.LENGTH_SHORT);
-            toast2.setMargin(50, 50);
-            toast2.show();
-            Thread.sleep(2000);
-            Toast toast3 = Toast.makeText(getApplicationContext(), "3/3 Dienste geladen", Toast.LENGTH_SHORT);
-            toast3.setMargin(50, 50);
-            toast3.show();
-        }catch(Exception e){
-            Log.e("NWT",e.toString());
-        }
-    }
+//    public void sendToast() {
+//        try {
+//            Looper.prepare();
+//            Toast toast = Toast.makeText(getApplicationContext(), "1/3 Name geladen", Toast.LENGTH_SHORT);
+//            toast.setMargin(50, 50);
+//            toast.show();
+//            Thread.sleep(2000);
+//            Toast toast2 = Toast.makeText(getApplicationContext(), "2/3 Staffeln geladen", Toast.LENGTH_SHORT);
+//            toast2.setMargin(50, 50);
+//            toast2.show();
+//            Thread.sleep(2000);
+//            Toast toast3 = Toast.makeText(getApplicationContext(), "3/3 Dienste geladen", Toast.LENGTH_SHORT);
+//            toast3.setMargin(50, 50);
+//            toast3.show();
+//        }catch(Exception e){
+//            Log.e("NWT",e.toString());
+//        }
+//    }
 }

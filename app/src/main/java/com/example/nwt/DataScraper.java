@@ -19,16 +19,21 @@ public class DataScraper {
 
     private static final String scrapeUrl = "https://www.imdb.com/find?q=NAME&s=tt&ttype=tv&ref_=fn_tv";
     private static final String scrapeUrlDienste = "https://www.werstreamt.es/serien/?q=NAME";
-    private static boolean done = false;
+    private static boolean done = true, doneName = true;
     private static Serie serie;
 
 
-    public static void scrapeData(Serie serie) {
+    public static void scrapeData(Serie serie, Runnable saveCallback, Toast updateToast) {
         DataScraper.serie = serie;
         done = false;
-        new Thread(() -> scrapeSerie()).start();
+        doneName = false;
+        if(updateToast != null) {
+            updateToast.setText(serie.getName() + " daten werden geladen...");
+            updateToast.show();
+        }
+        new Thread(() -> scrapeSerie(updateToast, saveCallback)).start();
         int cnt = 0;
-        while(!done) {
+        while(!doneName) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
@@ -41,7 +46,17 @@ public class DataScraper {
         }
     }
 
-    private static void scrapeSerie() {
+    public static void waitForFinish() {
+        while(!done) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void scrapeSerie(Toast updateToast, Runnable saveCallback) {
         try {
             URL url = new URL(scrapeUrl.replace("NAME", serie.getName()));
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -58,13 +73,14 @@ public class DataScraper {
                 if(foundList && line.contains("/title/")) {
                     urlString = line.split("href=\"")[1].split("\"")[0];
                     serie.setName(line.split("result_text")[1].split("</a")[0].split(">")[2]);
-                    done = true;
+                    doneName = true;
                     successful = true;
                     break;
                 }
             }
             conn.disconnect();
             if(!successful) {
+                doneName = true;
                 done = true;
                 return;
             }
@@ -152,5 +168,16 @@ public class DataScraper {
             e.printStackTrace();
         }
         done = true;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(updateToast != null) {
+            updateToast.setText(serie.getName() + " daten erfolgreich geladen!");
+            updateToast.show();
+        }
+
+        saveCallback.run();
     }
 }

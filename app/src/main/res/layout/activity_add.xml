@@ -19,6 +19,31 @@
         android:hint="Name der Serie"
         android:inputType="textPersonName" />
 
+    <Switch
+        android:id="@+id/SWITCH_AUTOLOAD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="Daten online beziehen" />
+
+    <EditText
+        android:id="@+id/INPUT_SEASONS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Anzahl an Staffeln"
+        android:inputType="number"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/INPUT_PROVIDERS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Dienste (durch komma getrennt)"
+        android:inputType="textPersonName"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

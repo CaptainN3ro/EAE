@@ -79,7 +79,12 @@ public class Serie implements Serializable {
             if(i > 0) {
                 newString += " ";
             }
-            newString += parts[i].substring(0, 1).toUpperCase() + parts[i].substring(1).toLowerCase();
+            if(parts[i].length() > 0) {
+                newString += parts[i].substring(0, 1).toUpperCase();
+            }
+            if(parts[i].length() > 1) {
+                newString += parts[i].substring(1).toLowerCase();
+            }
         }
         return newString;
     }
