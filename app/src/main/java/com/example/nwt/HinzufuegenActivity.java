@@ -31,6 +31,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
 
         Button addButton = findViewById(R.id.BUTTON_ADD);
         Button backButton = findViewById(R.id.BUTTON_CANCEL_ADD);
+        TextView hintText = findViewById(R.id.TEXT_HINT);
         nameBox = findViewById(R.id.INPUT_NAME);
         seasonBox = findViewById(R.id.INPUT_SEASONS);
         providerBox = findViewById(R.id.INPUT_PROVIDERS);
@@ -41,9 +42,11 @@ public class HinzufuegenActivity extends AppCompatActivity {
             if(state) {
                 providerBox.setVisibility(View.GONE);
                 seasonBox.setVisibility(View.GONE);
+                hintText.setVisibility(View.VISIBLE);
             } else {
                 providerBox.setVisibility(View.VISIBLE);
                 seasonBox.setVisibility(View.VISIBLE);
+                hintText.setVisibility(View.GONE);
             }
         });
 

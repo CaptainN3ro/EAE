@@ -44,6 +44,15 @@
         android:inputType="textPersonName"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/TEXT_HINT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textStyle="italic"
+        android:text="Daten werden von imdb.com und werstreamt.es empfangen. Für die Richtigkeit der Daten sind daher diese Dienste zuständig."
+        android:visibility="visible" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
