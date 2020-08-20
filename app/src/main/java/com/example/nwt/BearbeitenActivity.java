@@ -14,12 +14,13 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.nwt.util.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class BearbeitenActivity extends AppCompatActivity {
 
-    Button zurueck, speichern, entfernen;
     TextView name, staffeln, dienste;
     Serie s;
 
@@ -33,9 +34,9 @@ public class BearbeitenActivity extends AppCompatActivity {
         staffeln = findViewById(R.id.TEXT_STAFFELN);
         dienste = findViewById(R.id.TEXT_DIENSTE);
 
-        zurueck = findViewById(R.id.BUTTON_ZURUECK);
-        speichern = findViewById(R.id.BUTTON_SPEICHERN);
-        entfernen = findViewById(R.id.DT_DELETE);
+        Button zurueck = findViewById(R.id.BUTTON_ZURUECK);
+        Button speichern = findViewById(R.id.BUTTON_SPEICHERN);
+        Button entfernen = findViewById(R.id.DT_DELETE);
 
         Intent intent = getIntent();
 
@@ -61,7 +62,7 @@ public class BearbeitenActivity extends AppCompatActivity {
         });
         speichern.setOnClickListener((v) -> {
             if(!validateTextfields()) {
-                //Todo Show Error
+                Log.e("NWT", "Fehler beim Validieren der Daten!");
                 return;
             }
             updateSeriesData();
@@ -75,16 +76,8 @@ public class BearbeitenActivity extends AppCompatActivity {
             // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Sicher, dass die Serie gelöscht werden soll? Dies kann nicht rückgängig gemacht werden!")
-                    .setPositiveButton("Löschen!", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            returnDelete();
-                        }
-                    })
-                    .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
+                    .setPositiveButton("Löschen!", (dialog, id) -> returnDelete())
+                    .setNegativeButton("Abbrechen", (dialog, id) -> {return;});
             // Create the AlertDialog object and return it
             AlertDialog dialog = builder.create();
             dialog.show();
@@ -106,7 +99,7 @@ public class BearbeitenActivity extends AppCompatActivity {
         if(name.getText().toString().trim().equals("")) {
             return false;
         }
-        if(parseInt(staffeln.getText().toString()) < 0) {
+        if(Util.parseInt(staffeln.getText().toString()) < 0) {
             return false;
         }
         return true;
@@ -114,23 +107,12 @@ public class BearbeitenActivity extends AppCompatActivity {
 
     private void updateSeriesData() {
         s.setName(name.getText().toString());
-        s.setStaffeln(parseInt(staffeln.getText().toString()));
+        s.setStaffeln(Util.parseInt(staffeln.getText().toString()));
         List<Dienst> diensteList = new ArrayList<>();
         for(String s: dienste.getText().toString().split(",")) {
             diensteList.add(new Dienst(s.trim()));
         }
         s.setStreamingDienste(diensteList);
-    }
-
-    private int parseInt(String text) {
-        if(text.equals("")) {
-            return 0;
-        }
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
     }
 
     private void cancel() {

@@ -12,10 +12,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
-    TextView name_inhalt, staffeln_inhalt, dienste_inhalt;
-    Button bearbeiten, zurueck, entfernen;
-    Serie s;
 
+    Serie s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,18 +21,12 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        name_inhalt = findViewById(R.id.INSERT_NAME);
-        staffeln_inhalt = findViewById(R.id.INSERT_STAFFELN);
-        dienste_inhalt = findViewById(R.id.INSERT_DIENSTE);
-        bearbeiten = findViewById(R.id.DT_EDIT);
-        zurueck = findViewById(R.id.DT_BACK);
-        entfernen = findViewById(R.id.DT_DELETE);
         Intent intent = getIntent();
 
         if(intent.hasExtra("SERIE")) {
             s = (Serie) intent.getSerializableExtra("SERIE");
-            name_inhalt.setText(s.getName());
-            staffeln_inhalt.setText(s.getStaffeln() + "");
+            ((TextView) findViewById(R.id.INSERT_NAME)).setText(s.getName());
+            ((TextView) findViewById(R.id.INSERT_STAFFELN)).setText(s.getStaffeln() + "");
             String diensteText = "";
             for(int i = 0; i < s.getStreamingDienste().size(); i++) {
                 if(i > 0) {
@@ -42,15 +34,13 @@ public class DetailActivity extends AppCompatActivity {
                 }
                 diensteText += s.getStreamingDienste().get(i).getAnzeigeName();
             }
-            dienste_inhalt.setText(diensteText);
+            ((TextView) findViewById(R.id.INSERT_DIENSTE)).setText(diensteText);
         } else {
             cancel();
         }
-        zurueck.setOnClickListener((v) -> {
-            cancel();
-        });
+        ((Button) findViewById(R.id.DT_BACK)).setOnClickListener((v) -> cancel());
 
-        bearbeiten.setOnClickListener((view1) -> {
+        ((Button) findViewById(R.id.DT_EDIT)).setOnClickListener((view1) -> {
             Intent resultIntent = new Intent(this, BearbeitenActivity.class);
             resultIntent.putExtra("SERIE", s);
             startActivityForResult(resultIntent, 2);
@@ -67,7 +57,6 @@ public class DetailActivity extends AppCompatActivity {
             setResult(Activity.RESULT_OK, data);
             finish();
         }else if(resultCode == RESULT_FIRST_USER){
-
             setResult(Activity.RESULT_FIRST_USER, data);
             finish();
         }

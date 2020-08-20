@@ -12,12 +12,13 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.nwt.util.Util;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HinzufuegenActivity extends AppCompatActivity {
 
-    Button addButton, backButton;
     Switch autoloadSwitch;
     TextView nameBox, seasonBox, providerBox;
 
@@ -27,13 +28,13 @@ public class HinzufuegenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        addButton = findViewById(R.id.BUTTON_ADD);
+        Button addButton = findViewById(R.id.BUTTON_ADD);
+        Button backButton = findViewById(R.id.BUTTON_CANCEL_ADD);
         nameBox = findViewById(R.id.INPUT_NAME);
         seasonBox = findViewById(R.id.INPUT_SEASONS);
         providerBox = findViewById(R.id.INPUT_PROVIDERS);
-        backButton = findViewById(R.id.BUTTON_CANCEL_ADD);
-
         autoloadSwitch = findViewById(R.id.SWITCH_AUTOLOAD);
+
 
         autoloadSwitch.setOnCheckedChangeListener((button, state) -> {
             if(state) {
@@ -55,7 +56,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
         boolean autoload = autoloadSwitch.isChecked();
         Serie s = new Serie(name);
         if(!autoload) {
-            s.setStaffeln(parseInt(seasonBox.getText().toString()));
+            s.setStaffeln(Util.parseInt(seasonBox.getText().toString()));
             List<Dienst> dienste = new ArrayList<>();
             String[] parts = providerBox.getText().toString().split(",");
             for(String dienst: parts) {
@@ -70,17 +71,5 @@ public class HinzufuegenActivity extends AppCompatActivity {
         resultIntent.putExtra("AUTOLOAD", autoload);
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
-    }
-
-
-    private int parseInt(String text) {
-        if(text.equals("")) {
-            return 0;
-        }
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
     }
 }

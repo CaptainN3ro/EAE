@@ -1,5 +1,7 @@
 package com.example.nwt;
 
+import com.example.nwt.util.Util;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class Serie implements Serializable {
 
     public Serie(String name) {
         this();
-        this.name = makeFirstCaps(name);
+        this.name = Util.makeFirstCaps(name);
     }
 
     public Serie() {
@@ -27,7 +29,7 @@ public class Serie implements Serializable {
 
     public Serie(String name, int staffeln, boolean checked) {
         this();
-        this.name = makeFirstCaps(name);
+        this.name = Util.makeFirstCaps(name);
         this.staffeln = staffeln;
         this.checked = checked;
     }
@@ -37,7 +39,7 @@ public class Serie implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = makeFirstCaps(name);
+        this.name = Util.makeFirstCaps(name);
     }
 
     public int getStaffeln() {
@@ -55,8 +57,8 @@ public class Serie implements Serializable {
     public void setStreamingDienste(List<Dienst> streamingDienste) {
         this.streamingDienste = streamingDienste;
         for(Dienst d: streamingDienste) {
-            d.setAnzeigeName(makeFirstCaps(d.getAnzeigeName()));
-            d.setDienstName(makeFirstCaps(d.getDienstName()));
+            d.setAnzeigeName(Util.makeFirstCaps(d.getAnzeigeName()));
+            d.setDienstName(Util.makeFirstCaps(d.getDienstName()));
         }
     }
 
@@ -70,23 +72,6 @@ public class Serie implements Serializable {
 
     public int getId() {
         return id;
-    }
-
-    private String makeFirstCaps(String s) {
-        String[] parts = s.split(" ");
-        String newString = "";
-        for(int i = 0; i < parts.length; i++) {
-            if(i > 0) {
-                newString += " ";
-            }
-            if(parts[i].length() > 0) {
-                newString += parts[i].substring(0, 1).toUpperCase();
-            }
-            if(parts[i].length() > 1) {
-                newString += parts[i].substring(1).toLowerCase();
-            }
-        }
-        return newString;
     }
 
     @Override
