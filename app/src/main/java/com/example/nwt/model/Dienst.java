@@ -1,4 +1,4 @@
-package com.example.nwt;
+package com.example.nwt.model;
 
 import java.io.Serializable;
 import java.util.List;

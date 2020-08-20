@@ -1,4 +1,4 @@
-package com.example.nwt;
+package com.example.nwt.model;
 
 import com.example.nwt.util.Util;
 

@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import com.example.nwt.Dienst;
-import com.example.nwt.Serie;
+import com.example.nwt.model.Dienst;
+import com.example.nwt.model.Serie;
 import com.example.nwt.util.Util;
 
 import java.util.ArrayList;

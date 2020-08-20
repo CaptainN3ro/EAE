@@ -6,12 +6,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.nwt.model.Dienst;
+import com.example.nwt.model.Serie;
 import com.example.nwt.util.Util;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTitle(Html.fromHtml("<font color='#222222'>Hinzufügen</font>"));
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_hinzufuegen);
 
         Button addButton = findViewById(R.id.BUTTON_ADD);
         Button backButton = findViewById(R.id.BUTTON_CANCEL_ADD);
