@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     List<Serie> serien;
     List<Dienst> dienste;
-    Typeface font;
+
     File dataFile;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinnerDienste = findViewById(R.id.STREAMINGDIENSTE);
         serienLayout = findViewById(R.id.SERIEN_LAYOUT);
 
-        font = getResources().getFont(R.font.raleway);
+
 
         loadData();
     }
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             final CheckBox cb = new CheckBox(this);
             cb.setText(serie.getName());
             cb.setId(i);
-            cb.setTypeface(font);
+
             if(serie.isChecked()) {
                 cb.setChecked(true);
             }
