@@ -68,7 +68,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
     public void returnData(View v) {
         String name = nameBox.getText().toString();
         AtomicReference<List<String>> seriesNames = new AtomicReference<>();
-        new Thread(() -> seriesNames.set(DataScraper.scrapeSerien(name, 3))).start();
+        new Thread(() -> seriesNames.set(DataScraper.scrapeSerien(name, 5))).start();
         while(seriesNames.get() == null) {
             try {
                 Thread.sleep(500);

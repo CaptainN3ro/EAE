@@ -34,7 +34,11 @@ public class DataScraper {
                 String line = w.getLine();
                 int currentIndex = 1;
                 while(serienListe.size() < maxCount) {
-                    String[] tokens = line.split("</a>")[currentIndex].split(">");
+                    String[] parts = line.split("</a>");
+                    if(parts.length <= currentIndex) {
+                        break;
+                    }
+                    String[] tokens = parts[currentIndex].split(">");
                     serienListe.add(tokens[tokens.length-1]);
                     currentIndex += 2;
                 }
@@ -72,8 +76,9 @@ public class DataScraper {
                 String line = w.getLine();
                 int currentIndex = 1;
                 while(urlString.equals("")) {
-                    String[] tokens = line.split("</a>")[currentIndex].split(">");
-                    if(tokens[tokens.length-1].equals(serie.getName())) {
+                    String[] names = line.split("</a>");
+                    String[] tokens = names[currentIndex].split(">");
+                    if(tokens[tokens.length-1].equals(serie.getName()) || names.length <= currentIndex + 2) {
                         String[] parts = tokens[tokens.length-2].split("\"");
                         urlString = parts[parts.length-2];
                     }

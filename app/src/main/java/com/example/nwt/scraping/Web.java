@@ -39,7 +39,6 @@ public class Web {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return false;
     }
@@ -50,7 +49,7 @@ public class Web {
             url = new URL(urlString);
             br = new BufferedReader(new InputStreamReader(url.openStream()));
         } catch(Exception e) {
-            e.printStackTrace();
+
         }
     }
 
