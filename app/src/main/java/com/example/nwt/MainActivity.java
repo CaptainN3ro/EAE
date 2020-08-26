@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.example.nwt.model.Dienst;
 import com.example.nwt.model.Serie;
 import com.example.nwt.scraping.DataScraper;
+import com.example.nwt.util.Util;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -79,8 +80,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 diensteString += s.getStreamingDienste().get(i);
             }
-
-            outputDataString += s.getName() + ";" + s.getStaffeln() + ";" + s.isChecked() + ";" + diensteString + ";" + s.getCover() + "\n";
+            String checkedString = "";
+            if(s.getChecked() != null) {
+                for (int i = 0; i < s.getChecked().length; i++) {
+                    if (i > 0) {
+                        checkedString += ", ";
+                    }
+                    checkedString += s.getChecked()[i];
+                }
+            }
+            outputDataString += s.getName() + ";" + s.getStaffeln() + ";" + checkedString + ";" + diensteString + ";" + s.getCover() + "\n";
 
         }
         try {
@@ -146,7 +155,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             if(tokens.length < 3) {
                 return false;
             }
-            Serie serie = new Serie(tokens[0], Integer.parseInt(tokens[1]), Boolean.parseBoolean(tokens[2]));
+            int staffeln = Util.parseInt(tokens[1]);
+            Serie serie = new Serie(tokens[0], staffeln);
+
+            String[] checkedCSV = tokens[2].split(",");
+            for(int i = 0; i < staffeln; i++) {
+                serie.getChecked()[i] = Boolean.parseBoolean(checkedCSV[i].trim());
+            }
             if(tokens.length > 3) {
                 String[] anbieterCSV = tokens[3].split(",");
                 List<Dienst> dienstListe = new ArrayList<>();
@@ -211,11 +226,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case (2):
                 if(resultCode == Activity.RESULT_OK) {
                     Serie s = (Serie) data.getSerializableExtra("SERIE");
-                    for(Serie tmpSerie: serien) {
-                        if(tmpSerie.getId() == s.getId()) {
-                            tmpSerie.setName(s.getName());
-                            tmpSerie.setStaffeln(s.getStaffeln());
-                            tmpSerie.setStreamingDienste(s.getStreamingDienste());
+                    for(int i=0;i<serien.size();i++){
+                        if(serien.get(i).getId() == s.getId()) {
+                            serien.set(i, s);
                         }
                     }
                 }else if(resultCode == Activity.RESULT_FIRST_USER){
@@ -223,6 +236,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     for(int i=0;i<serien.size();i++){
                         if(serien.get(i).getId()==s.getId()){
                             serien.remove(i);
+                        }
+                    }
+                }else if(resultCode == Activity.RESULT_CANCELED){
+                    if(data == null || !data.hasExtra("SERIE")) {
+                        break;
+                    }
+                    Serie s = (Serie) data.getSerializableExtra("SERIE");
+                    for(int i=0;i<serien.size();i++){
+                        if(serien.get(i).getId()==s.getId()){
+                            serien.set(i, s);
                         }
                     }
                 }
@@ -280,19 +303,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             cb.setText(serie.getName());
             cb.setId(i);
 
-            if(serie.isChecked()) {
-                cb.setChecked(true);
+            boolean allChecked = true;
+            for(boolean b: serie.getChecked()) {
+                allChecked &= b;
             }
-            cb.setOnCheckedChangeListener((button, value) -> {
-                serie.setChecked(value);
-                saveData();
-            });
-            cb.setOnLongClickListener((view1) -> {
+            cb.setChecked(allChecked);
+
+            cb.setOnCheckedChangeListener((b, v) -> {
+                cb.setChecked(!v);
+                serienLayout.jumpDrawablesToCurrentState();
                 Intent intent = new Intent(this, DetailActivity.class);
                 intent.putExtra("SERIE", serie);
                 startActivityForResult(intent, 2);
-                return true;
             });
+
             serienLayout.addView(cb);
         }
     }

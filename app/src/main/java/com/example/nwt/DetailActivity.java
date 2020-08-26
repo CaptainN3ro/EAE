@@ -10,7 +10,9 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import java.util.Base64;
 
 public class DetailActivity extends AppCompatActivity {
 
+    LinearLayout checkedLayout;
     Serie s;
 
 
@@ -33,9 +36,11 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
 
+        checkedLayout = findViewById(R.id.LAYOUT_CHECKBOXES);
+
         if(intent.hasExtra("SERIE")) {
             s = (Serie) intent.getSerializableExtra("SERIE");
-            if(s.getCover()!=null) {
+            if(!s.getCover().equals("")) {
                 byte[] b=Base64.getDecoder().decode(s.getCover());
                 ((ImageView) findViewById(R.id.COVER)).setImageBitmap(BitmapFactory.decodeByteArray(b,0,b.length));
             }
@@ -49,6 +54,41 @@ public class DetailActivity extends AppCompatActivity {
                 diensteText += s.getStreamingDienste().get(i).getAnzeigeName();
             }
             ((TextView) findViewById(R.id.INSERT_DIENSTE)).setText(diensteText);
+            boolean[] checked = s.getChecked();
+            if(checked != null) {
+                for(int i = 0; i < Math.min(checked.length, 5); i++) {
+                    final CheckBox cb = new CheckBox(this);
+                    cb.setText("Staffel " + (i + 1));
+                    cb.setId(i);
+                    cb.setChecked(checked[i]);
+                    int finalI = i;
+                    cb.setOnCheckedChangeListener((button, value) -> {
+                        checked[finalI] = value;
+                        // TODO save?
+                    });
+                    checkedLayout.addView(cb);
+                }
+                if(checked.length > 5) {
+                    Button b = new Button(this);
+                    b.setText("Alle anzeigen");
+                    b.setOnClickListener((v) -> {
+                        checkedLayout.removeView(v);
+                        for(int i = 5; i < checked.length; i++) {
+                            final CheckBox cb = new CheckBox(this);
+                            cb.setText("Staffel " + (i + 1));
+                            cb.setId(i);
+                            cb.setChecked(checked[i]);
+                            int finalI = i;
+                            cb.setOnCheckedChangeListener((button, value) -> {
+                                checked[finalI] = value;
+                                // TODO save?
+                            });
+                            checkedLayout.addView(cb);
+                        }
+                    });
+                    checkedLayout.addView(b);
+                }
+            }
         } else {
             cancel();
         }
@@ -78,7 +118,9 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void cancel() {
-        setResult(Activity.RESULT_CANCELED);
+        Intent i = new Intent();
+        i.putExtra("SERIE", s);
+        setResult(Activity.RESULT_CANCELED, i);
         finish();
     }
 }

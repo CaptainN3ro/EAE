@@ -14,7 +14,7 @@ public class Serie implements Serializable {
 
     private final int id;
 
-    private boolean checked;
+    private boolean[] checked;
     private int staffeln;
     private String name;
     private List<Dienst> streamingDienste;
@@ -27,15 +27,16 @@ public class Serie implements Serializable {
     }
 
     public Serie() {
+        this.cover = "";
         streamingDienste = new ArrayList<>();
         id = ++ID_COUNTER;
     }
 
-    public Serie(String name, int staffeln, boolean checked) {
+    public Serie(String name, int staffeln) {
         this();
         this.name = Util.makeFirstCaps(name);
         this.staffeln = staffeln;
-        this.checked = checked;
+        this.checked = new boolean[staffeln];
     }
 
     public String getName() {
@@ -52,6 +53,7 @@ public class Serie implements Serializable {
 
     public void setStaffeln(int staffeln) {
         this.staffeln = staffeln;
+        this.checked = new boolean[staffeln];
     }
 
     public List<Dienst> getStreamingDienste() {
@@ -66,11 +68,11 @@ public class Serie implements Serializable {
         }
     }
 
-    public boolean isChecked() {
+    public boolean[] getChecked() {
         return checked;
     }
 
-    public void setChecked(boolean checked) {
+    public void setChecked(boolean[] checked) {
         this.checked = checked;
     }
 

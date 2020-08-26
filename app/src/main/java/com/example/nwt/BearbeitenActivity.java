@@ -107,6 +107,7 @@ public class BearbeitenActivity extends AppCompatActivity {
     }
 
     private void updateSeriesData() {
+        boolean[] checkedOld = s.getChecked();
         s.setName(name.getText().toString());
         s.setStaffeln(Util.parseInt(staffeln.getText().toString()));
         List<Dienst> diensteList = new ArrayList<>();
@@ -114,6 +115,9 @@ public class BearbeitenActivity extends AppCompatActivity {
             diensteList.add(new Dienst(s.trim()));
         }
         s.setStreamingDienste(diensteList);
+        for(int i = 0; i < Math.min(checkedOld.length, s.getChecked().length); i++) {
+            s.getChecked()[i] = checkedOld[i];
+        }
     }
 
     private void cancel() {
