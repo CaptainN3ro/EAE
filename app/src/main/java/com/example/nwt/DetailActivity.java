@@ -38,9 +38,6 @@ public class DetailActivity extends AppCompatActivity {
             if(s.getCover()!=null) {
                 byte[] b=Base64.getDecoder().decode(s.getCover());
                 ((ImageView) findViewById(R.id.COVER)).setImageBitmap(BitmapFactory.decodeByteArray(b,0,b.length));
-            }else{
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                ((ImageView) findViewById(R.id.COVER)).setLayoutParams(params);
             }
             ((TextView) findViewById(R.id.INSERT_NAME)).setText(s.getName());
             ((TextView) findViewById(R.id.INSERT_STAFFELN)).setText(s.getStaffeln() + "");
