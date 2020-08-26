@@ -53,6 +53,14 @@
         android:visibility="visible" />
 
     <LinearLayout
+        android:id="@+id/LAYOUT_SELECTION"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        tools:visibility="visible"></LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -75,7 +83,7 @@
             android:layout_margin="5dp"
             android:background="@drawable/custom_button_2"
             android:fontFamily="sans-serif"
-            android:text="Hinzufügen"
+            android:text="Suchen"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

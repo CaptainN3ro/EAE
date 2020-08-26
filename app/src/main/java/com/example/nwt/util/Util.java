@@ -14,6 +14,17 @@ public class Util {
         }
     }
 
+    public static boolean parseBoolean(String text) {
+        if(text.equals("")) {
+            return false;
+        }
+        try {
+            return Boolean.parseBoolean(text);
+        } catch (Exception ex) {
+            return false;
+        }
+    }
+
     public static String makeFirstCaps(String s) {
         String[] parts = s.split(" ");
         String newString = "";

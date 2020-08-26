@@ -1,7 +1,5 @@
 package com.example.nwt.model;
 
-import android.graphics.Bitmap;
-
 import com.example.nwt.util.Util;
 
 import java.io.Serializable;

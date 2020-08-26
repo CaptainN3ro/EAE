@@ -8,11 +8,13 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.nwt.model.Data;
 import com.example.nwt.model.Dienst;
 import com.example.nwt.model.Serie;
 import com.example.nwt.util.Util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataScraper {
@@ -24,9 +26,25 @@ public class DataScraper {
     private static Serie serie;
     private static Toast finalToast;
 
+    public static List<String> scrapeSerien(String name, int maxCount) {
+        List<String> serienListe = new ArrayList<>();
+        Web w = new Web(IMDB_URL.replace("NAME", name));
+        if(w.gotoLineThatContains("findList")) {
+            if (w.gotoLineThatContains("result_text")) {
+                String line = w.getLine();
+                int currentIndex = 1;
+                while(serienListe.size() < maxCount) {
+                    String[] tokens = line.split("</a>")[currentIndex].split(">");
+                    serienListe.add(tokens[tokens.length-1]);
+                    currentIndex += 2;
+                }
+            }
+        }
+        return serienListe;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void scrapeData(Serie serie, Runnable saveCallback, Activity activity) {
+    public static void scrapeData(Serie serie, Activity activity) {
         while(!done) {
             try {
                 Thread.sleep(100);
@@ -37,21 +55,8 @@ public class DataScraper {
 
         DataScraper.serie = serie;
         done = false;
-        doneName = false;
 
-        new Thread(() -> scrapeSerie(saveCallback)).start();
-        int cnt = 0;
-        while(!doneName) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(cnt++ > TIMEOUT_IN_SECONDS * 10) {
-                return;
-            }
-            continue;
-        }
+        new Thread(() -> scrapeSerie()).start();
 
         finalToast = Toast.makeText(activity, serie.getName() + " Daten werden geladen...", Toast.LENGTH_SHORT);
         finalToast.setGravity(Gravity.BOTTOM, 0, 50);
@@ -59,17 +64,23 @@ public class DataScraper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private static void scrapeSerie(Runnable saveCallback) {
+    private static void scrapeSerie() {
         Web w = new Web(IMDB_URL.replace("NAME", serie.getName()));
         String urlString = "";
         if(w.gotoLineThatContains("findList")) {
-            if(w.gotoLineThatContains("/title/")) {
+            if(w.gotoLineThatContains("result_text")) {
                 String line = w.getLine();
-                urlString = line.split("href=\"")[1].split("\"")[0];
-                serie.setName(line.split("result_text")[1].split("</a")[0].split(">")[2]);
+                int currentIndex = 1;
+                while(urlString.equals("")) {
+                    String[] tokens = line.split("</a>")[currentIndex].split(">");
+                    if(tokens[tokens.length-1].equals(serie.getName())) {
+                        String[] parts = tokens[tokens.length-2].split("\"");
+                        urlString = parts[parts.length-2];
+                    }
+                    currentIndex += 2;
+                }
             }
         }
-        doneName = true;
 
         w.connect(IMDB_URL.split(".com")[0] + ".com" + urlString);
         if(w.gotoLineThatContains("poster")) {
@@ -111,7 +122,7 @@ public class DataScraper {
         finalToast.setText(serie.getName() + " Daten erfolgreich geladen!");
         finalToast.show();
 
-        saveCallback.run();
+        Data.saveData();
         done = true;
     }
 }

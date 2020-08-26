@@ -1,22 +1,21 @@
 package com.example.nwt;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.nwt.model.Data;
 import com.example.nwt.model.Serie;
 
 import java.util.Base64;
@@ -30,16 +29,16 @@ public class DetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         setTitle(Html.fromHtml("<font color='#222222'>Details</font>"));
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
 
         checkedLayout = findViewById(R.id.LAYOUT_CHECKBOXES);
 
-        if(intent.hasExtra("SERIE")) {
-            s = (Serie) intent.getSerializableExtra("SERIE");
+        if(intent.hasExtra("SERIENID")) {
+            s = Data.getSerieById(intent.getIntExtra("SERIENID", -1));
             if(!s.getCover().equals("")) {
                 byte[] b=Base64.getDecoder().decode(s.getCover());
                 ((ImageView) findViewById(R.id.COVER)).setImageBitmap(BitmapFactory.decodeByteArray(b,0,b.length));
@@ -64,7 +63,7 @@ public class DetailActivity extends AppCompatActivity {
                     int finalI = i;
                     cb.setOnCheckedChangeListener((button, value) -> {
                         checked[finalI] = value;
-                        // TODO save?
+                        Data.saveData();
                     });
                     checkedLayout.addView(cb);
                 }
@@ -81,7 +80,7 @@ public class DetailActivity extends AppCompatActivity {
                             int finalI = i;
                             cb.setOnCheckedChangeListener((button, value) -> {
                                 checked[finalI] = value;
-                                // TODO save?
+                                Data.saveData();
                             });
                             checkedLayout.addView(cb);
                         }
@@ -95,32 +94,26 @@ public class DetailActivity extends AppCompatActivity {
         ((Button) findViewById(R.id.DT_BACK)).setOnClickListener((v) -> cancel());
         ((Button) findViewById(R.id.DT_EDIT)).setOnClickListener((view1) -> {
             Intent resultIntent = new Intent(this, BearbeitenActivity.class);
-            resultIntent.putExtra("SERIE", s);
-            startActivityForResult(resultIntent, 2);
+            resultIntent.putExtra("SERIENID", s.getId());
+            startActivityForResult(resultIntent, 1);
 
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK) {
-            setResult(Activity.RESULT_OK, data);
-            finish();
-        }else if(resultCode == RESULT_FIRST_USER){
-            setResult(Activity.RESULT_FIRST_USER, data);
-            finish();
+        if(resultCode == Activity.RESULT_CANCELED) {
+            return;
         }
+        setResult(Activity.RESULT_OK, data);
+        finish();
     }
 
 
 
     private void cancel() {
-        Intent i = new Intent();
-        i.putExtra("SERIE", s);
-        setResult(Activity.RESULT_CANCELED, i);
+        setResult(Activity.RESULT_CANCELED);
         finish();
     }
 }

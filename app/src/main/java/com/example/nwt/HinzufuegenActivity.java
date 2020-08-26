@@ -1,27 +1,33 @@
 package com.example.nwt;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.nwt.model.Dienst;
 import com.example.nwt.model.Serie;
+import com.example.nwt.scraping.DataScraper;
 import com.example.nwt.util.Util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class HinzufuegenActivity extends AppCompatActivity {
 
     Switch autoloadSwitch;
     TextView nameBox, seasonBox, providerBox;
+    LinearLayout layoutSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
         seasonBox = findViewById(R.id.INPUT_SEASONS);
         providerBox = findViewById(R.id.INPUT_PROVIDERS);
         autoloadSwitch = findViewById(R.id.SWITCH_AUTOLOAD);
+        layoutSelection = findViewById(R.id.LAYOUT_SELECTION);
 
 
         autoloadSwitch.setOnCheckedChangeListener((button, state) -> {
@@ -43,10 +50,14 @@ public class HinzufuegenActivity extends AppCompatActivity {
                 providerBox.setVisibility(View.GONE);
                 seasonBox.setVisibility(View.GONE);
                 hintText.setVisibility(View.VISIBLE);
+                addButton.setText("Suchen");
+                layoutSelection.setVisibility(View.VISIBLE);
             } else {
                 providerBox.setVisibility(View.VISIBLE);
                 seasonBox.setVisibility(View.VISIBLE);
                 hintText.setVisibility(View.GONE);
+                addButton.setText("Hinzufügen");
+                layoutSelection.setVisibility(View.GONE);
             }
         });
 
@@ -55,8 +66,28 @@ public class HinzufuegenActivity extends AppCompatActivity {
     }
 
     public void returnData(View v) {
-        Intent resultIntent = new Intent();
         String name = nameBox.getText().toString();
+        AtomicReference<List<String>> seriesNames = new AtomicReference<>();
+        new Thread(() -> seriesNames.set(DataScraper.scrapeSerien(name, 3))).start();
+        while(seriesNames.get() == null) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        layoutSelection.removeAllViews();
+        for(int i = 0; i < seriesNames.get().size(); i++) {
+            Button b = new Button(this);
+            b.setText(seriesNames.get().get(i));
+            int finalI = i;
+            b.setOnClickListener((button) -> addSerieWithName(seriesNames.get().get(finalI)));
+            layoutSelection.addView(b);
+        }
+    }
+
+    private void addSerieWithName(String name) {
+        Intent resultIntent = new Intent();
         boolean autoload = autoloadSwitch.isChecked();
         Serie s = new Serie(name);
         if(!autoload) {

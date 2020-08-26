@@ -1,7 +1,5 @@
 package com.example.nwt;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +11,9 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.nwt.model.Data;
 import com.example.nwt.model.Dienst;
 import com.example.nwt.model.Serie;
 import com.example.nwt.util.Util;
@@ -41,8 +42,8 @@ public class BearbeitenActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        if(intent.hasExtra("SERIE")) {
-            s = (Serie) intent.getSerializableExtra("SERIE");
+        if(intent.hasExtra("SERIENID")) {
+            s = Data.getSerieById(intent.getIntExtra("SERIENID", -1));
             name.setText(s.getName());
             staffeln.setText(s.getStaffeln() + "");
             String diensteText = "";
@@ -67,19 +68,15 @@ public class BearbeitenActivity extends AppCompatActivity {
                 return;
             }
             updateSeriesData();
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("SERIE", s);
-            setResult(Activity.RESULT_OK, resultIntent);
+            setResult(Activity.RESULT_OK);
             finish();
         });
 
         entfernen.setOnClickListener((view) -> {
-            // Use the Builder class for convenient dialog construction
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Sicher, dass die Serie gelöscht werden soll? Dies kann nicht rückgängig gemacht werden!")
                     .setPositiveButton("Löschen!", (dialog, id) -> returnDelete())
                     .setNegativeButton("Abbrechen", (dialog, id) -> {return;});
-            // Create the AlertDialog object and return it
             AlertDialog dialog = builder.create();
             dialog.show();
             Button b = dialog.getButton(Dialog.BUTTON_POSITIVE);
@@ -90,9 +87,8 @@ public class BearbeitenActivity extends AppCompatActivity {
     }
 
     private void returnDelete() {
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("SERIE", s);
-        setResult(Activity.RESULT_FIRST_USER, resultIntent);
+        Data.removeSerie(s);
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -118,6 +114,7 @@ public class BearbeitenActivity extends AppCompatActivity {
         for(int i = 0; i < Math.min(checkedOld.length, s.getChecked().length); i++) {
             s.getChecked()[i] = checkedOld[i];
         }
+        Data.updateMainView();
     }
 
     private void cancel() {
