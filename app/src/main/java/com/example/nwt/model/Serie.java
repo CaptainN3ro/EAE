@@ -1,5 +1,7 @@
 package com.example.nwt.model;
 
+import android.graphics.Bitmap;
+
 import com.example.nwt.util.Util;
 
 import java.io.Serializable;
@@ -16,6 +18,8 @@ public class Serie implements Serializable {
     private int staffeln;
     private String name;
     private List<Dienst> streamingDienste;
+    private String cover;
+
 
     public Serie(String name) {
         this();
@@ -72,6 +76,14 @@ public class Serie implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     @Override

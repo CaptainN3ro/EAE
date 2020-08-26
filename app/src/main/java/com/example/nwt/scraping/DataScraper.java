@@ -1,8 +1,12 @@
 package com.example.nwt.scraping;
 
 import android.app.Activity;
+import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.nwt.model.Dienst;
 import com.example.nwt.model.Serie;
@@ -21,6 +25,7 @@ public class DataScraper {
     private static Toast finalToast;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void scrapeData(Serie serie, Runnable saveCallback, Activity activity) {
         while(!done) {
             try {
@@ -53,6 +58,7 @@ public class DataScraper {
         finalToast.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private static void scrapeSerie(Runnable saveCallback) {
         Web w = new Web(IMDB_URL.replace("NAME", serie.getName()));
         String urlString = "";
@@ -66,6 +72,14 @@ public class DataScraper {
         doneName = true;
 
         w.connect(IMDB_URL.split(".com")[0] + ".com" + urlString);
+        if(w.gotoLineThatContains("poster")) {
+            if(w.gotoLineThatContains("src=")){
+                String imageUrl = w.getLine().split("src=\"")[1].split("\"")[0];
+
+                serie.setCover(Web.getBase64FromURL(imageUrl));
+            }
+        }
+
         if(w.gotoLineThatContains("Seasons")) {
             if(w.gotoLineThatContains("season=")) {
                 String seasons = w.getLine().split("season=")[1].split("&")[0];

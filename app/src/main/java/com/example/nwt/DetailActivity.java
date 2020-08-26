@@ -1,30 +1,47 @@
 package com.example.nwt;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.nwt.model.Serie;
+
+import java.util.Base64;
 
 public class DetailActivity extends AppCompatActivity {
 
     Serie s;
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setTitle(Html.fromHtml("<font color='#222222'>Details</font>"));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
         Intent intent = getIntent();
 
         if(intent.hasExtra("SERIE")) {
             s = (Serie) intent.getSerializableExtra("SERIE");
+            if(s.getCover()!=null) {
+                byte[] b=Base64.getDecoder().decode(s.getCover());
+                ((ImageView) findViewById(R.id.COVER)).setImageBitmap(BitmapFactory.decodeByteArray(b,0,b.length));
+            }else{
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                ((ImageView) findViewById(R.id.COVER)).setLayoutParams(params);
+            }
             ((TextView) findViewById(R.id.INSERT_NAME)).setText(s.getName());
             ((TextView) findViewById(R.id.INSERT_STAFFELN)).setText(s.getStaffeln() + "");
             String diensteText = "";
@@ -39,7 +56,6 @@ public class DetailActivity extends AppCompatActivity {
             cancel();
         }
         ((Button) findViewById(R.id.DT_BACK)).setOnClickListener((v) -> cancel());
-
         ((Button) findViewById(R.id.DT_EDIT)).setOnClickListener((view1) -> {
             Intent resultIntent = new Intent(this, BearbeitenActivity.class);
             resultIntent.putExtra("SERIE", s);

@@ -3,29 +3,23 @@ package com.example.nwt;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -35,10 +29,13 @@ import com.example.nwt.model.Serie;
 import com.example.nwt.scraping.DataScraper;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -82,9 +79,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 diensteString += s.getStreamingDienste().get(i);
             }
-            outputDataString += s.getName() + ";" + s.getStaffeln() + ";" + s.isChecked() + ";" + diensteString + "\n";
+
+            outputDataString += s.getName() + ";" + s.getStaffeln() + ";" + s.isChecked() + ";" + diensteString + ";" + s.getCover() + "\n";
+
         }
         try {
+
             OutputStreamWriter out = new OutputStreamWriter(openFileOutput(dataFile.getName(), MODE_APPEND));
             out.write(outputDataString);
             out.close();
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
         try {
             InputStreamReader in = new InputStreamReader(openFileInput(dataFile.getName()));
@@ -124,11 +125,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             OutputStreamWriter out = new OutputStreamWriter(openFileOutput(dataFile.getName(), MODE_PRIVATE));
             deleteFile(out.getEncoding());
             out.close();
-        }catch(Exception e){
 
+            for(Serie s: serien){
+                out = new OutputStreamWriter(openFileOutput(s.getName()+".jpg", MODE_PRIVATE));
+                deleteFile(out.getEncoding());
+                out.close();
+            }
+        }catch(Exception e){
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean addSerieFromCSVString(String csvString) {
         String[] serienCSV = csvString.split("\n");
         if(serienCSV.length == 0) {
@@ -146,8 +153,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 for (int i = 0; i < anbieterCSV.length; i++) {
                     dienstListe.add(new Dienst(anbieterCSV[i].trim()));
                 }
+
                 serie.setStreamingDienste(dienstListe);
             }
+            if(tokens.length > 4){
+                serie.setCover(tokens[4]);
+            }
+
             serien.add(serie);
         }
         return true;
@@ -176,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

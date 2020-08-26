@@ -7,104 +7,122 @@
     android:orientation="vertical"
     tools:context="com.example.nwt.DetailActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/NAME_ON_DETAIL"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:text="Name"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/INSERT_NAME"
-            android:layout_width="204dp"
-            android:layout_height="match_parent"
-            android:textSize="24sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/DETAIL_STAFFELN"
-            android:layout_width="17dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:text="Staffeln"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/INSERT_STAFFELN"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textSize="24sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/DIENSTE_ON_DETAIL"
-            android:layout_width="217dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif"
-            android:text="Dienste"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/INSERT_DIENSTE"
-            android:layout_width="204dp"
-            android:layout_height="match_parent"
-            android:textSize="24sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/DT_BACK"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_red"
-            android:padding="5dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="5dp"
-            android:text="Zurück"
-            android:textColor="#E53B3B" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/DT_EDIT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_2"
-            android:text="Bearbeiten"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/COVER"
+                android:layout_width="220dp"
+                android:layout_height="330dp"
+                android:layout_gravity="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/NAME_ON_DETAIL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:text="Name"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/INSERT_NAME"
+                    android:layout_width="204dp"
+                    android:layout_height="match_parent"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/DETAIL_STAFFELN"
+                    android:layout_width="17dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:text="Staffeln"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/INSERT_STAFFELN"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/DIENSTE_ON_DETAIL"
+                    android:layout_width="217dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif"
+                    android:text="Dienste"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/INSERT_DIENSTE"
+                    android:layout_width="204dp"
+                    android:layout_height="match_parent"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/DT_BACK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_red"
+                    android:padding="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Zurück"
+                    android:textColor="#E53B3B" />
+
+                <Button
+                    android:id="@+id/DT_EDIT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button_2"
+                    android:text="Bearbeiten"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
