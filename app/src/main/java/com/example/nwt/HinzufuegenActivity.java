@@ -65,7 +65,9 @@ public class HinzufuegenActivity extends AppCompatActivity {
     }
 
     public void returnData(View v) {
-        ((InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        if(getCurrentFocus() != null) {
+            ((InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
         String name = nameBox.getText().toString();
         AtomicReference<List<String>> seriesNames = new AtomicReference<>();
         new Thread(() -> seriesNames.set(DataScraper.scrapeSerien(name, 5))).start();
