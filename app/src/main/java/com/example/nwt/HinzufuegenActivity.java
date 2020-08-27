@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -67,10 +68,15 @@ public class HinzufuegenActivity extends AppCompatActivity {
     }
 
     public void returnData(View v) {
+        String name = nameBox.getText().toString();
+        boolean autoload = autoloadSwitch.isChecked();
+        if(!autoload) {
+            addSerieWithName(name);
+            return;
+        }
         if(getCurrentFocus() != null) {
             ((InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
-        String name = nameBox.getText().toString();
         AtomicReference<List<String>> seriesNames = new AtomicReference<>();
         new Thread(() -> seriesNames.set(DataScraper.scrapeSerien(name, 5))).start();
         while(seriesNames.get() == null) {
