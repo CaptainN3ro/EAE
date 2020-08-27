@@ -67,7 +67,6 @@ public class Web {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String getBase64FromURL(String src) {
         try {
-            Log.e("NWT", src);
             java.net.URL url = new java.net.URL(src);
             HttpsURLConnection connection = (HttpsURLConnection) url
                     .openConnection();
