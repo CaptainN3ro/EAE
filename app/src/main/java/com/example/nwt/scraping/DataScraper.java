@@ -39,7 +39,9 @@ public class DataScraper {
                         break;
                     }
                     String[] tokens = parts[currentIndex].split(">");
-                    serienListe.add(tokens[tokens.length-1]);
+                    if(!serienListe.contains(tokens[tokens.length-1])) {
+                        serienListe.add(tokens[tokens.length-1]);
+                    }
                     currentIndex += 2;
                 }
             }

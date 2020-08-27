@@ -2,6 +2,8 @@ package com.example.nwt;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -79,6 +81,17 @@ public class HinzufuegenActivity extends AppCompatActivity {
             }
         }
         layoutSelection.removeAllViews();
+        if(seriesNames.get().size() == 0) {
+            TextView errorText = new TextView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            int dp = (int) Util.convertDpToPixel(10, this);
+            params.setMargins(dp, dp, dp, dp);
+            errorText.setLayoutParams(params);
+            errorText.setText("Keine Serie mit dem namen: \"" + name + "\" konnte gefunden werden!");
+            errorText.setTextColor(Color.rgb(200, 50, 50));
+            errorText.setTypeface(null, Typeface.BOLD);
+            layoutSelection.addView(errorText);
+        }
         for(int i = 0; i < seriesNames.get().size(); i++) {
             Button b = new Button(this);
             b.setText(seriesNames.get().get(i));

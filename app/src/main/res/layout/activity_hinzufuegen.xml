@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
         android:text="Daten werden von imdb.com und werstreamt.es empfangen. Für die Richtigkeit der Daten sind daher diese Dienste zuständig."
+        android:textStyle="italic"
         android:visibility="visible" />
 
     <LinearLayout

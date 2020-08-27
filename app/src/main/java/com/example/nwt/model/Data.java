@@ -22,13 +22,46 @@ public class Data {
 
     private static List<Serie> serien = new ArrayList<>();
     private static List<Dienst> dienste = new ArrayList<>();
+    private static List<Serie> filteredSerien = new ArrayList<>();
+
+    private static Dienst lastFilter;
 
     public static void createDataFile(File storagePath) {
         dataFile = new File(storagePath, dataFileName);
     }
 
+    public static int getLastFilterIndex() {
+        if(lastFilter == null) {
+            return 0;
+        }
+        for(int i = 0; i < dienste.size(); i++) {
+            if(dienste.get(i).getDienstName().equals(lastFilter.getDienstName())) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public static void createUpdateCallback(Runnable runnable) {
         updateCallback = runnable;
+    }
+
+    public static List<Serie> getFilteredSerien() {
+        return filteredSerien;
+    }
+
+    public static void applyFilter(Dienst d, Runnable runnable) {
+        if(d == lastFilter) {
+            return;
+        }
+        lastFilter = d;
+        filteredSerien.clear();
+        for(int i = 0; i < serien.size(); i++) {
+            if(d.isIncluded(serien.get(i).getStreamingDienste())) {
+                filteredSerien.add(serien.get(i));
+            }
+        }
+        runnable.run();
     }
 
     public static void updateMainView() {
@@ -36,6 +69,48 @@ public class Data {
             updateCallback.run();
             saveData();
         }
+    }
+
+    public static boolean isLastSerie(int id) {
+        if(filteredSerien.size() == 0) {
+            return true;
+        }
+        if(filteredSerien.get(filteredSerien.size()-1).getId() == id) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isFirstSerie(int id) {
+        if(filteredSerien.size() == 0) {
+            return true;
+        }
+        if(filteredSerien.get(0).getId() == id) {
+            return true;
+        }
+        return false;
+    }
+
+    public static Serie getNextSerie(int serienId) {
+        for(int i = 0; i < filteredSerien.size(); i++) {
+            if(filteredSerien.get(i).getId() == serienId) {
+                return filteredSerien.get((i + 1) % filteredSerien.size());
+            }
+        }
+        return null;
+    }
+
+    public static Serie getPrevSerie(int serienId) {
+        for(int i = 0; i < filteredSerien.size(); i++) {
+            if(filteredSerien.get(i).getId() == serienId) {
+                if(i <= 0) {
+                    return filteredSerien.get(filteredSerien.size() - 1);
+                } else {
+                    return filteredSerien.get(i - 1);
+                }
+            }
+        }
+        return null;
     }
 
     public static int getDiensteCount() {

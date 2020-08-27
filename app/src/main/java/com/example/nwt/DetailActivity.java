@@ -4,20 +4,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.nwt.events.OnSwipeTouchListener;
 import com.example.nwt.model.Data;
 import com.example.nwt.model.Serie;
 import com.example.nwt.util.Util;
@@ -30,6 +35,14 @@ public class DetailActivity extends AppCompatActivity {
     Serie s;
 
 
+    @Override
+    public void onBackPressed() {
+        Intent setIntent = new Intent(DetailActivity.this, MainActivity.class);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(setIntent);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +54,37 @@ public class DetailActivity extends AppCompatActivity {
 
         checkedLayout = findViewById(R.id.LAYOUT_CHECKBOXES);
 
+        ScrollView layout = findViewById(R.id.LAYOUT_SCROLL);
+
         if(intent.hasExtra("SERIENID")) {
             s = Data.getSerieById(intent.getIntExtra("SERIENID", -1));
+
+            layout.setOnTouchListener(new OnSwipeTouchListener(this) {
+                @Override
+                public void onSwipeLeft() {
+                    super.onSwipeLeft();
+                    if(Data.isLastSerie(s.getId())) {
+                        return;
+                    }
+                    Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
+                    intent.putExtra("SERIENID", Data.getNextSerie(s.getId()).getId());
+                    startActivityForResult(intent, 1);
+                    DetailActivity.this.overridePendingTransition(R.anim.animation_right_1, R.anim.animation_left_1);
+                }
+
+                @Override
+                public void onSwipeRight() {
+                    super.onSwipeLeft();
+                    if(Data.isFirstSerie(s.getId())) {
+                        return;
+                    }
+                    Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
+                    intent.putExtra("SERIENID", Data.getPrevSerie(s.getId()).getId());
+                    startActivityForResult(intent, 1);
+                    DetailActivity.this.overridePendingTransition(R.anim.animation_right, R.anim.animation_left);
+                }
+            });
+
             if(!s.getCover().equals("")) {
                 byte[] b=Base64.getDecoder().decode(s.getCover());
                 ((ImageView) findViewById(R.id.COVER)).setImageBitmap(BitmapFactory.decodeByteArray(b,0,b.length));
@@ -72,14 +114,15 @@ public class DetailActivity extends AppCompatActivity {
                     checkedLayout.addView(cb);
                 }
                 if(checked.length > 5) {
-                    Button b = new Button(this);
-                    b.setBackgroundResource(R.drawable.button_blue_gradient);
+                     Button b = new Button(this);
+                     b.setBackgroundResource(R.drawable.button_blue_gradient);
+                     b.setTextColor(Color.rgb(255, 255, 255));
                      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                      int dp=(int) Util.convertDpToPixel(10, this);
                      params.setMargins(dp,dp,dp,dp);
                      b.setLayoutParams(params);
-                    b.setText("Alle anzeigen");
-                    b.setOnClickListener((v) -> {
+                     b.setText("Alle anzeigen");
+                     b.setOnClickListener((v) -> {
                         checkedLayout.removeView(v);
                         for(int i = 5; i < checked.length; i++) {
                             final CheckBox cb = new CheckBox(this);
@@ -105,7 +148,6 @@ public class DetailActivity extends AppCompatActivity {
             Intent resultIntent = new Intent(this, BearbeitenActivity.class);
             resultIntent.putExtra("SERIENID", s.getId());
             startActivityForResult(resultIntent, 1);
-
         });
     }
 

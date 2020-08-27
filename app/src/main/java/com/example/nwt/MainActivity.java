@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,10 +25,38 @@ import com.example.nwt.model.Data;
 import com.example.nwt.model.Serie;
 import com.example.nwt.scraping.DataScraper;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Spinner spinnerDienste;
     LinearLayout serienLayout;
+
+    private AtomicBoolean backpressed = new AtomicBoolean();
+
+    @Override
+    public void onBackPressed() {
+        if(!backpressed.get()) {
+            Toast t = Toast.makeText(MainActivity.this, "Zurück Button erneut drücken, um die App zu beenden!", Toast.LENGTH_SHORT);
+            t.setGravity(Gravity.BOTTOM, 0, 50);
+            t.show();
+            backpressed.set(true);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                backpressed.set(false);
+            }).start();
+        } else {
+            Intent startMain = new Intent(Intent.ACTION_MAIN);
+            startMain.addCategory(Intent.CATEGORY_HOME);
+            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(startMain);
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -92,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
                 break;
             case (2):
-                Data.updateDienste();
+                createCheckboxes();
             default:
                 break;
         }
@@ -103,35 +132,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, Data.getDienste());
         spinnerDienste.setAdapter(spinnerAdapter);
         spinnerDienste.setOnItemSelectedListener(this);
+        spinnerDienste.setSelection(Data.getLastFilterIndex());
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int dienstIndex, long l) {
-        createCheckboxes(dienstIndex);
+        Data.applyFilter(Data.getDienst(dienstIndex), this::createCheckboxes);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        createCheckboxes(0);
+        Data.applyFilter(Data.getDienst(0), this::createCheckboxes);
     }
 
     private void update() {
         updateSpinner();
-        createCheckboxes(0);
+        createCheckboxes();
     }
 
-    private void createCheckboxes(int dienstIndex) {
-        if(dienstIndex > Data.getDiensteCount()) {
-            finish();
-        }
+    private void createCheckboxes() {
 
         serienLayout.removeAllViews();
 
-        for (int i=0; i< Data.getSerienCount(); i++){
-            Serie serie = Data.getSerieByIndex(i);
-            if(!Data.getDienst(dienstIndex).isIncluded(serie.getStreamingDienste())) {
-                continue;
-            }
+        List<Serie> filteredSerien = Data.getFilteredSerien();
+
+        for (int i=0; i< filteredSerien.size(); i++){
+            Serie serie = filteredSerien.get(i);
             final CheckBox cb = new CheckBox(this);
             cb.setText(serie.getName());
             cb.setId(i);
