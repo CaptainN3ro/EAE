@@ -14,12 +14,12 @@
 
     <item
         android:id="@+id/ITEM_HILFE"
-        android:icon="@android:drawable/ic_menu_help"
+        android:icon="@drawable/fragezeichen_app"
         android:title="Hilfe"
         app:showAsAction="always" />
     <item
         android:id="@+id/ITEM_HINZUFUEGEN"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/app_add1"
         android:title="Hinzufügen"
         app:showAsAction="always" />
 </menu>
