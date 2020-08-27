@@ -192,7 +192,7 @@ public class Data {
                         checkedString += s.getChecked()[i];
                     }
                 }
-                bw.write(s.getName() + ";" + s.getStaffeln() + ";" + checkedString + ";" + diensteString + ";" + s.getCover());
+                bw.write(s.getName() + ";" + s.getStaffeln() + ";" + checkedString + ";" + diensteString + ";" + s.getCover()+";"+ s.getLaufzeit());
                 bw.newLine();
             }
             bw.close();
@@ -230,6 +230,8 @@ public class Data {
         }
         if(tokens.length > 4) {
             s.setCover(tokens[4]);
+            s.setLaufzeit(tokens[5].trim());
+
         }
         serien.add(s);
     }

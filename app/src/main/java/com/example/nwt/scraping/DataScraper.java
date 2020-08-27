@@ -89,6 +89,7 @@ public class DataScraper {
             }
         }
 
+
         w.connect(IMDB_URL.split(".com")[0] + ".com" + urlString);
         if(w.gotoLineThatContains("poster")) {
             if(w.gotoLineThatContains("src=")){
@@ -98,11 +99,16 @@ public class DataScraper {
             }
         }
 
+
         if(w.gotoLineThatContains("Seasons")) {
             if(w.gotoLineThatContains("season=")) {
                 String seasons = w.getLine().split("season=")[1].split("&")[0];
                 serie.setStaffeln(Util.parseInt(seasons));
             }
+        }
+        if(w.gotoLineThatContains(" onclick=\"toggleSeeMoreEpisodes")){
+            String laufzeit = w.getLine().split("episodes,")[1].trim();
+            serie.setLaufzeit(laufzeit);
         }
 
         w.connect(WERSTREAMTES_URL.replace("NAME", serie.getName()));

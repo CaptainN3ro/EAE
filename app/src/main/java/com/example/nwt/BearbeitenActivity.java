@@ -23,7 +23,7 @@ import java.util.List;
 
 public class BearbeitenActivity extends AppCompatActivity {
 
-    TextView name, staffeln, dienste;
+    TextView name, staffeln, dienste, laufzeit;
     Serie s;
 
     @Override
@@ -33,6 +33,7 @@ public class BearbeitenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bearbeiten);
 
         name = findViewById(R.id.TEXT_NAME);
+        laufzeit = findViewById(R.id.TEXT_LAUFZEIT);
         staffeln = findViewById(R.id.TEXT_STAFFELN);
         dienste = findViewById(R.id.TEXT_DIENSTE);
 
@@ -53,7 +54,9 @@ public class BearbeitenActivity extends AppCompatActivity {
                 }
                 diensteText += s.getStreamingDienste().get(i).getAnzeigeName();
             }
+
             dienste.setText(diensteText);
+            laufzeit.setText(s.getLaufzeit());
         } else {
             cancel();
         }
@@ -99,6 +102,19 @@ public class BearbeitenActivity extends AppCompatActivity {
         if(Util.parseInt(staffeln.getText().toString()) < 0) {
             return false;
         }
+        String[] laufzeitParts = laufzeit.getText().toString().split("-");
+        if(laufzeitParts.length > 2){
+            return false;
+        }
+        if(laufzeitParts.length == 1 && laufzeitParts[0].equals ("")){
+            return true;
+        }
+        for(int i = 0; i < laufzeitParts.length; i++){
+            if(Util.parseInt(laufzeitParts[i].trim()) < 1000) {
+                return false;
+            }
+
+        }
         return true;
     }
 
@@ -114,6 +130,7 @@ public class BearbeitenActivity extends AppCompatActivity {
         for(int i = 0; i < Math.min(checkedOld.length, s.getChecked().length); i++) {
             s.getChecked()[i] = checkedOld[i];
         }
+        s.setLaufzeit(laufzeit.getText().toString());
         Data.updateMainView();
     }
 

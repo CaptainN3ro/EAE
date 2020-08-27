@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class HinzufuegenActivity extends AppCompatActivity {
 
     Switch autoloadSwitch;
-    TextView nameBox, seasonBox, providerBox;
+    TextView nameBox, seasonBox, providerBox, runtimeBox;
     LinearLayout layoutSelection;
 
     @Override
@@ -43,6 +43,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
         nameBox = findViewById(R.id.INPUT_NAME);
         seasonBox = findViewById(R.id.INPUT_SEASONS);
         providerBox = findViewById(R.id.INPUT_PROVIDERS);
+        runtimeBox = findViewById(R.id.INPUT_LAUFZEIT);
         autoloadSwitch = findViewById(R.id.SWITCH_AUTOLOAD);
         layoutSelection = findViewById(R.id.LAYOUT_SELECTION);
 
@@ -51,12 +52,14 @@ public class HinzufuegenActivity extends AppCompatActivity {
             if(state) {
                 providerBox.setVisibility(View.GONE);
                 seasonBox.setVisibility(View.GONE);
+                runtimeBox.setVisibility(View.GONE);
                 hintText.setVisibility(View.VISIBLE);
                 addButton.setText("Suchen");
                 layoutSelection.setVisibility(View.VISIBLE);
             } else {
                 providerBox.setVisibility(View.VISIBLE);
                 seasonBox.setVisibility(View.VISIBLE);
+                runtimeBox.setVisibility(View.VISIBLE);
                 hintText.setVisibility(View.GONE);
                 addButton.setText("Hinzufügen");
                 layoutSelection.setVisibility(View.GONE);
@@ -127,6 +130,7 @@ public class HinzufuegenActivity extends AppCompatActivity {
                 dienste.add(new Dienst(dienst.trim()));
             }
             s.setStreamingDienste(dienste);
+            s.setLaufzeit(runtimeBox.getText().toString());
         }
         resultIntent.putExtra("SERIE", s);
         resultIntent.putExtra("AUTOLOAD", autoload);

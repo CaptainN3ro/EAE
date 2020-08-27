@@ -17,6 +17,7 @@ public class Serie implements Serializable {
     private String name;
     private List<Dienst> streamingDienste;
     private String cover;
+    private String laufzeit;
 
 
     public Serie(String name) {
@@ -84,6 +85,13 @@ public class Serie implements Serializable {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public void setLaufzeit(String laufzeit){
+        this.laufzeit = laufzeit;
+    }
+    public String getLaufzeit(){
+        return laufzeit;
     }
 
     @Override

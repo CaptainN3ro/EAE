@@ -91,6 +91,7 @@ public class DetailActivity extends AppCompatActivity {
             }
             ((TextView) findViewById(R.id.INSERT_NAME)).setText(s.getName());
             ((TextView) findViewById(R.id.INSERT_STAFFELN)).setText(s.getStaffeln() + "");
+            ((TextView) findViewById(R.id.INSERT_LAUFZEIT)).setText(s.getLaufzeit() + "");
             String diensteText = "";
             for(int i = 0; i < s.getStreamingDienste().size(); i++) {
                 if(i > 0) {
