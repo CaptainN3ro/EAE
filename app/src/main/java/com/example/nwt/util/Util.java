@@ -49,4 +49,26 @@ public class Util {
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    public static boolean validateData(String name, String staffeln, String laufzeit) {
+        if(name.trim().equals("")) {
+            return false;
+        }
+        if(Util.parseInt(staffeln) < 0) {
+            return false;
+        }
+        String[] laufzeitParts = laufzeit.split("-");
+        if(laufzeitParts.length > 2){
+            return false;
+        }
+        if(laufzeitParts.length == 1 && laufzeitParts[0].equals ("")){
+            return true;
+        }
+        for(int i = 0; i < laufzeitParts.length; i++){
+            if(Util.parseInt(laufzeitParts[i].trim()) < 1000) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

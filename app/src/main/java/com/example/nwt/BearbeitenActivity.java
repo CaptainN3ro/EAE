@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +27,7 @@ public class BearbeitenActivity extends AppCompatActivity {
 
     TextView name, staffeln, dienste, laufzeit;
     Serie s;
+    LinearLayout errorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class BearbeitenActivity extends AppCompatActivity {
         laufzeit = findViewById(R.id.TEXT_LAUFZEIT);
         staffeln = findViewById(R.id.TEXT_STAFFELN);
         dienste = findViewById(R.id.TEXT_DIENSTE);
+        errorLayout = findViewById(R.id.LAYOUT_ERROR);
 
         Button zurueck = findViewById(R.id.BUTTON_ZURUECK);
         Button speichern = findViewById(R.id.BUTTON_SPEICHERN);
@@ -66,8 +70,18 @@ public class BearbeitenActivity extends AppCompatActivity {
             cancel();
         });
         speichern.setOnClickListener((v) -> {
-            if(!validateTextfields()) {
+            if(!Util.validateData(name.getText().toString(), staffeln.getText().toString(), laufzeit.getText().toString())) {
                 Log.e("NWT", "Fehler beim Validieren der Daten!");
+                errorLayout.removeAllViews();
+                TextView errorText = new TextView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                int dp = (int) Util.convertDpToPixel(10, this);
+                params.setMargins(dp, dp, dp, dp);
+                errorText.setLayoutParams(params);
+                errorText.setText("Die eingegebenen Daten sind invalide!");
+                errorText.setTextColor(Color.rgb(200, 50, 50));
+                errorText.setTypeface(null, Typeface.BOLD);
+                errorLayout.addView(errorText);
                 return;
             }
             updateSeriesData();
@@ -93,29 +107,6 @@ public class BearbeitenActivity extends AppCompatActivity {
         Data.removeSerie(s);
         setResult(Activity.RESULT_OK);
         finish();
-    }
-
-    private boolean validateTextfields() {
-        if(name.getText().toString().trim().equals("")) {
-            return false;
-        }
-        if(Util.parseInt(staffeln.getText().toString()) < 0) {
-            return false;
-        }
-        String[] laufzeitParts = laufzeit.getText().toString().split("-");
-        if(laufzeitParts.length > 2){
-            return false;
-        }
-        if(laufzeitParts.length == 1 && laufzeitParts[0].equals ("")){
-            return true;
-        }
-        for(int i = 0; i < laufzeitParts.length; i++){
-            if(Util.parseInt(laufzeitParts[i].trim()) < 1000) {
-                return false;
-            }
-
-        }
-        return true;
     }
 
     private void updateSeriesData() {

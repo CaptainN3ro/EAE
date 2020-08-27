@@ -68,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
                     intent.putExtra("SERIENID", Data.getNextSerie(s.getId()).getId());
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, 2);
                     DetailActivity.this.overridePendingTransition(R.anim.animation_right_1, R.anim.animation_left_1);
                 }
 
@@ -80,7 +80,7 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     Intent intent = new Intent(DetailActivity.this, DetailActivity.class);
                     intent.putExtra("SERIENID", Data.getPrevSerie(s.getId()).getId());
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, 2);
                     DetailActivity.this.overridePendingTransition(R.anim.animation_right, R.anim.animation_left);
                 }
             });
@@ -157,8 +157,13 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_CANCELED) {
-            return;
+        if(requestCode == 1) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                return;
+            }
+        } else if(requestCode == 2) {
+            setResult(Activity.RESULT_CANCELED);
+            finish();
         }
         setResult(Activity.RESULT_OK, data);
         finish();

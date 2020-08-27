@@ -11,11 +11,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="376dp"
-        android:layout_height="469dp"
+        android:layout_width="353dp"
+        android:layout_height="478dp"
         android:layout_gravity="center"
         android:adjustViewBounds="false"
-        app:srcCompat="@drawable/tutorial_nwt" />
+        app:srcCompat="@drawable/tutorial_nwt"
+        tools:srcCompat="@drawable/tutorial_nwt" />
 
     <Button
         android:id="@+id/BUTTON_VERSTANDEN"
