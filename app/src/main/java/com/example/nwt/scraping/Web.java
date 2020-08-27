@@ -3,6 +3,7 @@ package com.example.nwt.scraping;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -66,6 +67,7 @@ public class Web {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String getBase64FromURL(String src) {
         try {
+            Log.e("NWT", src);
             java.net.URL url = new java.net.URL(src);
             HttpsURLConnection connection = (HttpsURLConnection) url
                     .openConnection();
@@ -73,14 +75,16 @@ public class Web {
             connection.connect();
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            myBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            return Base64.getEncoder().encodeToString(byteArray);
-
+            if(myBitmap!=null) {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                myBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                return Base64.getEncoder().encodeToString(byteArray);
+            }
+            return "";
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 

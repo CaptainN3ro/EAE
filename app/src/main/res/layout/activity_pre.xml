@@ -55,7 +55,7 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="72dp"
         android:alpha="0.5"
-        android:background="@drawable/custom_button_2"
+        android:background="@drawable/button_green_gradient"
         android:fontFamily="sans-serif"
         android:padding="5dp"
         android:text="Let's watch"

@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.nwt.model.Data;
 import com.example.nwt.model.Serie;
+import com.example.nwt.util.Util;
 
 import java.util.Base64;
 
@@ -69,6 +70,11 @@ public class DetailActivity extends AppCompatActivity {
                 }
                 if(checked.length > 5) {
                     Button b = new Button(this);
+                    b.setBackgroundResource(R.drawable.button_blue_gradient);
+                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                     int dp=(int) Util.convertDpToPixel(10, this);
+                     params.setMargins(dp,dp,dp,dp);
+                     b.setLayoutParams(params);
                     b.setText("Alle anzeigen");
                     b.setOnClickListener((v) -> {
                         checkedLayout.removeView(v);
@@ -99,6 +105,8 @@ public class DetailActivity extends AppCompatActivity {
 
         });
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

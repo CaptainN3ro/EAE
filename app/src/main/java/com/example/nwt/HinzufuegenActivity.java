@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,7 +19,6 @@ import com.example.nwt.scraping.DataScraper;
 import com.example.nwt.util.Util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -83,6 +81,11 @@ public class HinzufuegenActivity extends AppCompatActivity {
             Button b = new Button(this);
             b.setText(seriesNames.get().get(i));
             int finalI = i;
+            b.setBackgroundResource(R.drawable.button_black_edge);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            int dp=(int) Util.convertDpToPixel(5, this);
+            params.setMargins(dp,dp,dp,dp);
+            b.setLayoutParams(params);
             b.setOnClickListener((button) -> addSerieWithName(seriesNames.get().get(finalI)));
             layoutSelection.addView(b);
         }

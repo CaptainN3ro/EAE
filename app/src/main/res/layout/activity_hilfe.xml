@@ -4,17 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/tutorial_nwt"
+    android:background="#FFFFFF"
     android:gravity="bottom"
     android:orientation="vertical"
     tools:context="com.example.nwt.HilfeActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="376dp"
+        android:layout_height="469dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="false"
+        app:srcCompat="@drawable/tutorial_nwt" />
 
     <Button
         android:id="@+id/BUTTON_VERSTANDEN"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:background="@drawable/custom_button_2"
+        android:background="@drawable/button_green_gradient"
         android:text="Verstanden!"
         android:textColor="#FFFFFF"
         tools:text="Verstanden!" />

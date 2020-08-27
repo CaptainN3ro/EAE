@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_red"
+                    android:background="@drawable/button_red_edge"
                     android:padding="5dp"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/custom_button_2"
+                    android:background="@drawable/button_green_gradient"
                     android:text="Bearbeiten"
                     android:textColor="#FFFFFF" />
             </LinearLayout>

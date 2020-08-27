@@ -80,7 +80,7 @@ public class BearbeitenActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
             Button b = dialog.getButton(Dialog.BUTTON_POSITIVE);
-            b.setBackgroundResource(R.drawable.button_delete);
+            b.setBackgroundResource(R.drawable.button_blue_gradient);
             b.setPadding(25, 0, 25, 0);
             b.setTextColor(Color.rgb(255, 255, 255));
         });
