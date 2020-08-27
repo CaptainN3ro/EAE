@@ -55,14 +55,14 @@ public class HinzufuegenActivity extends AppCompatActivity {
                 runtimeBox.setVisibility(View.GONE);
                 hintText.setVisibility(View.VISIBLE);
                 addButton.setText("Suchen");
-                layoutSelection.setVisibility(View.VISIBLE);
+                layoutSelection.removeAllViews();
             } else {
                 providerBox.setVisibility(View.VISIBLE);
                 seasonBox.setVisibility(View.VISIBLE);
                 runtimeBox.setVisibility(View.VISIBLE);
                 hintText.setVisibility(View.GONE);
                 addButton.setText("Hinzufügen");
-                layoutSelection.setVisibility(View.GONE);
+                layoutSelection.removeAllViews();
             }
         });
 
@@ -71,9 +71,23 @@ public class HinzufuegenActivity extends AppCompatActivity {
     }
 
     public void returnData(View v) {
+        layoutSelection.removeAllViews();
         String name = nameBox.getText().toString();
         boolean autoload = autoloadSwitch.isChecked();
         if(!autoload) {
+            if(!Util.validateData(name, seasonBox.getText().toString(), runtimeBox.getText().toString())) {
+                Log.e("NWT", "Fehler beim Validieren der Daten!");
+                TextView errorText = new TextView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                int dp = (int) Util.convertDpToPixel(10, this);
+                params.setMargins(dp, dp, dp, dp);
+                errorText.setLayoutParams(params);
+                errorText.setText("Die eingegebenen Daten sind invalide!");
+                errorText.setTextColor(Color.rgb(200, 50, 50));
+                errorText.setTypeface(null, Typeface.BOLD);
+                layoutSelection.addView(errorText);
+                return;
+            }
             addSerieWithName(name);
             return;
         }
@@ -89,7 +103,6 @@ public class HinzufuegenActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        layoutSelection.removeAllViews();
         if(seriesNames.get().size() == 0) {
             TextView errorText = new TextView(this);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
