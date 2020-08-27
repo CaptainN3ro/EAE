@@ -19,7 +19,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/ITEM_HINZUFUEGEN"
-        android:icon="@drawable/app_add1"
+        android:icon="@drawable/add_app_523748"
         android:title="Hinzufügen"
         app:showAsAction="always" />
 </menu>
