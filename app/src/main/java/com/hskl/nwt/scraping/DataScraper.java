@@ -20,8 +20,7 @@ public class DataScraper {
 
     private static final String IMDB_URL = "https://www.imdb.com/find?q=NAME&s=tt&ttype=tv&ref_=fn_tv";
     private static final String WERSTREAMTES_URL = "https://www.werstreamt.es/serien/?q=NAME";
-    private static final int TIMEOUT_IN_SECONDS = 5;
-    private static boolean doneName = true, done = true;
+    private static boolean done = true;
     private static Serie serie;
     private static Toast finalToast;
 
@@ -126,13 +125,17 @@ public class DataScraper {
         }
         w.disconnect();
 
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        boolean toasted = false;
+        while(!toasted) {
+            try {
+                Thread.sleep(500);
+                finalToast.setText(serie.getName() + " Daten erfolgreich geladen!");
+                finalToast.show();
+                toasted = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        finalToast.setText(serie.getName() + " Daten erfolgreich geladen!");
-        finalToast.show();
 
         Data.saveData();
         done = true;
