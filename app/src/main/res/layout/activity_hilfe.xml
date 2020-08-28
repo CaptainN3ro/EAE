@@ -1,30 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:gravity="bottom"
     android:orientation="vertical"
     tools:context="com.example.nwt.HilfeActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="353dp"
-        android:layout_height="478dp"
-        android:layout_gravity="center"
-        android:adjustViewBounds="false"
-        app:srcCompat="@drawable/tutorial_nwt"
-        tools:srcCompat="@drawable/tutorial_nwt" />
-
-    <Button
-        android:id="@+id/BUTTON_VERSTANDEN"
+    <TextView
+        android:id="@+id/TITLE"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/button_green_gradient"
-        android:text="Verstanden!"
-        android:textColor="#FFFFFF"
-        tools:text="Verstanden!" />
-</LinearLayout>
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="Wie Funktioniert es?"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/PARA_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TITLE"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:text='Mit dem "+" rechts oben, kannst du eine neue Serie hinzufügen. Hierbei werden die Daten standardmäßig aus dem Internet geholt. Natürlich kannst du auch manuell Serien hinzufügen.'
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/PARA_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PARA_1"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:text='Beim Klick auf eine Serie siehst du ihre Details und kannst diese auch löschen oder bearbeiten. In der Detailübersicht ist es zusätzlich noch möglich durch "swipen" nach links oder rechts, zur nächsten bzw. vorherigen Serie zu gelangen.'
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/PARA_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/PARA_2"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Sobald alle Staffeln in den Details abgehakt sind, also die Serie komplett geschaut wurde, wird die Serie in der Hauptübersicht auch abgehakt."
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/BUTTON_VERSTANDEN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/button_green_gradient"
+            android:text="Verstanden!"
+            android:textColor="#FFFFFF"
+            tools:text="Verstanden!" />
+    </LinearLayout>
+
+</RelativeLayout>

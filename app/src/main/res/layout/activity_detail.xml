@@ -46,11 +46,10 @@
 
                 <TextView
                     android:id="@+id/DETAIL_LAUFZEIT"
-                    android:layout_width="200dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif"
-                    android:gravity="start"
                     android:text="Laufzeit:"
                     android:textSize="24sp" />
 
@@ -71,7 +70,7 @@
 
                 <TextView
                     android:id="@+id/DETAIL_STAFFELN"
-                    android:layout_width="200dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif"
@@ -104,7 +103,7 @@
 
                 <TextView
                     android:id="@+id/DIENSTE_ON_DETAIL"
-                    android:layout_width="200dp"
+                    android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif"
